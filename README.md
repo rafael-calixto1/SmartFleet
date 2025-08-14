@@ -125,5 +125,18 @@ npm test
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 📸 Preview
 
+Here are some screenshots of the SmartFleet application:
 
+### Dashboard - Fuel Costs
+![Dashboard - Fuel Costs](frontend/public/preview/menu-dashboard-fuel-costs.jpg)
+
+### Dashboard - Full Fuel Costs
+![Dashboard - Full Fuel Costs](frontend/public/preview/dashboard-fuel-costs-full.jpg)
+
+### Dashboard - Fuel Types and Maintenance
+![Dashboard - Fuel Types and Maintenance](frontend/public/preview/dashboard-fuel-types-maintenance.jpg)
+
+### Dashboard - Maintenance and Refueling
+![Dashboard - Maintenance and Refueling](frontend/public/preview/dashboard-maintenance-refueling.jpg)

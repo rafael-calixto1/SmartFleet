@@ -52,11 +52,11 @@ const CarFormPage: React.FC = () => {
         if (Array.isArray(response.data.drivers)) {
           setDrivers(response.data.drivers);
         } else {
-          throw new Error("Formato de resposta inesperado");
+          throw new Error("Unexpected response format");
         }
       } catch (error) {
         console.error("Error fetching drivers:", error);
-        setError("Falha ao carregar motoristas. Tente novamente mais tarde.");
+        setError("Failed to load drivers. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -78,7 +78,7 @@ const CarFormPage: React.FC = () => {
     e.preventDefault();
 
     if (!carData.make || !carData.model || !carData.next_tire_change || !carData.next_oil_change || !carData.license_plate) {
-      toast.error("Todos os campos obrigatórios devem ser preenchidos.");
+      toast.error("All required fields must be filled.");
       return;
     }
 
@@ -91,43 +91,43 @@ const CarFormPage: React.FC = () => {
 
     try {
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/cars`, dataToSend);
-      toast.success("Carro adicionado com sucesso!");
+      toast.success("Car added successfully!");
       navigate('/cars');
     } catch (error) {
       console.error("Error adding car:", error);
-      toast.error("Falha ao adicionar carro. Tente novamente.");
+      toast.error("Failed to add car. Please try again.");
     }
   };
 
   const pageActions = (
     <LinkButton to="/cars">
-      Voltar para Lista
+      Back to List
     </LinkButton>
   );
 
   return (
     <div style={{ paddingLeft: '60px' }}>
-    <PageLayout title="Adicionar Novo Carro" actions={pageActions}>
+    <PageLayout title="Add New Car" actions={pageActions}>
       <Paper elevation={0} sx={{ p: 3, maxWidth: 900, margin: '0 auto' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
           <DirectionsCarIcon sx={{ fontSize: 40, color: 'success.main', mr: 2 }} />
           <Typography variant="h5" component="h2" color="success.main">
-            Informações do Veículo
+            Vehicle Information
           </Typography>
         </Box>
 
         <form onSubmit={handleSubmit}>
           <Grid container spacing={4}>
-            {/* Informações Básicas */}
+            {/* Basic Information */}
             <Grid item xs={12}>
               <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-                Informações Básicas
+                Basic Information
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Marca"
+                    label="Brand"
                     name="make"
                     value={carData.make}
                     onChange={handleChange}
@@ -138,7 +138,7 @@ const CarFormPage: React.FC = () => {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Modelo"
+                    label="Model"
                     name="model"
                     value={carData.model}
                     onChange={handleChange}
@@ -149,7 +149,7 @@ const CarFormPage: React.FC = () => {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Placa do Veículo"
+                    label="License Plate"
                     name="license_plate"
                     value={carData.license_plate}
                     onChange={handleChange}
@@ -159,16 +159,16 @@ const CarFormPage: React.FC = () => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth variant="outlined">
-                    <InputLabel id="driver-select-label">Motorista</InputLabel>
+                    <InputLabel id="driver-select-label">Driver</InputLabel>
                     <Select
                       labelId="driver-select-label"
                       name="driver_id"
                       value={carData.driver_id || ""}
                       onChange={handleChange}
-                      label="Motorista"
+                      label="Driver"
                     >
                       <MenuItem value="" disabled>
-                        {loading ? <CircularProgress size={24} /> : "Selecione um motorista"}
+                        {loading ? <CircularProgress size={24} /> : "Select a driver"}
                       </MenuItem>
                       {drivers.map((driver) => (
                         <MenuItem key={driver.id} value={driver.id}>
@@ -185,17 +185,17 @@ const CarFormPage: React.FC = () => {
               <Divider sx={{ my: 2 }} />
             </Grid>
 
-            {/* Informações de Quilometragem */}
+            {/* Mileage Information */}
             <Grid item xs={12}>
               <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-                Informações de Quilometragem
+                Mileage Information
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     type="number"
-                    label="Kilometragem Atual"
+                    label="Current Kilometers"
                     name="current_kilometers"
                     value={carData.current_kilometers}
                     onChange={handleChange}
@@ -210,17 +210,17 @@ const CarFormPage: React.FC = () => {
               <Divider sx={{ my: 2 }} />
             </Grid>
 
-            {/* Informações de Manutenção */}
+            {/* Maintenance Information */}
             <Grid item xs={12}>
               <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 500 }}>
-                Informações de Manutenção
+                Maintenance Information
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
                     type="number"
-                    label="Próxima Troca de Pneu (Km)"
+                    label="Next Tire Change (Km)"
                     name="next_tire_change"
                     value={carData.next_tire_change}
                     onChange={handleChange}
@@ -235,7 +235,7 @@ const CarFormPage: React.FC = () => {
                         onChange={handleChange}
                       />
                     }
-                    label="Troca de Pneu Vencida?"
+                    label="Tire Change Overdue?"
                     sx={{ mt: 1 }}
                   />
                 </Grid>
@@ -243,7 +243,7 @@ const CarFormPage: React.FC = () => {
                   <TextField
                     fullWidth
                     type="number"
-                    label="Próxima Troca de Óleo (Km)"
+                    label="Next Oil Change (Km)"
                     name="next_oil_change"
                     value={carData.next_oil_change}
                     onChange={handleChange}
@@ -258,7 +258,7 @@ const CarFormPage: React.FC = () => {
                         onChange={handleChange}
                       />
                     }
-                    label="Troca de Óleo Vencida?"
+                    label="Oil Change Overdue?"
                     sx={{ mt: 1 }}
                   />
                 </Grid>
@@ -273,7 +273,7 @@ const CarFormPage: React.FC = () => {
                   fullWidth
                   size="large"
                 >
-                  Adicionar Carro
+                  Add Car
                 </PrimaryButton>
               </Box>
             </Grid>

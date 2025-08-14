@@ -85,21 +85,21 @@ const VehicleStatusDashboard: React.FC = () => {
     labels: vehicleData.map(v => `${v.marca_carro} ${v.modelo_carro}`),
     datasets: [
       {
-        label: 'Total Manutenções',
+        label: 'Total Maintenances',
         data: vehicleData.map(v => v.total_manutencoes),
         backgroundColor: 'rgba(255, 206, 86, 0.5)',
         borderColor: 'rgba(255, 206, 86, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Trocas de Óleo',
+        label: 'Oil Changes',
         data: vehicleData.map(v => v.total_trocas_oleo),
         backgroundColor: 'rgba(75, 192, 192, 0.5)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Trocas de Pneu',
+        label: 'Tire Changes',
         data: vehicleData.map(v => v.total_trocas_pneu),
         backgroundColor: 'rgba(153, 102, 255, 0.5)',
         borderColor: 'rgba(153, 102, 255, 1)',
@@ -112,14 +112,14 @@ const VehicleStatusDashboard: React.FC = () => {
     labels: vehicleData.map(v => `${v.marca_carro} ${v.modelo_carro}`),
     datasets: [
       {
-        label: 'Consumo Total de Combustível (L)',
+        label: 'Total Fuel Consumption (L)',
         data: vehicleData.map(v => v.total_combustivel),
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
       },
       {
-        label: 'Custo Total (R$)',
+        label: 'Total Cost (U$)',
         data: vehicleData.map(v => v.custo_total_combustivel),
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         borderColor: 'rgba(255, 99, 132, 1)',
@@ -136,7 +136,7 @@ const VehicleStatusDashboard: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Estatísticas por Veículo',
+        text: 'Statistics by Vehicle',
       },
     },
     scales: {
@@ -151,7 +151,7 @@ const VehicleStatusDashboard: React.FC = () => {
       <div className="container mt-4" style={{ marginLeft: '60px' }}>
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Carregando...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </div>
@@ -170,12 +170,12 @@ const VehicleStatusDashboard: React.FC = () => {
 
   return (
     <div className="container-fluid p-4" style={{ marginLeft: '60px' }}>
-      <h1 className="mb-4">Dashboard de Status dos Veículos</h1>
+      <h1 className="mb-4">Vehicle Status Dashboard</h1>
       
       <Row className="mb-4">
         <Col md={6}>
           <Form.Group>
-            <Form.Label>Data Inicial</Form.Label>
+            <Form.Label>Start Date</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.startDate}
@@ -185,7 +185,7 @@ const VehicleStatusDashboard: React.FC = () => {
         </Col>
         <Col md={6}>
           <Form.Group>
-            <Form.Label>Data Final</Form.Label>
+            <Form.Label>End Date</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.endDate}
@@ -198,7 +198,7 @@ const VehicleStatusDashboard: React.FC = () => {
       <Row className="mb-4">
         <Col md={6}>
           <Card>
-            <Card.Header>Manutenções por Veículo</Card.Header>
+            <Card.Header>Maintenances by Vehicle</Card.Header>
             <Card.Body>
               <Bar data={maintenanceChartData} options={chartOptions} />
             </Card.Body>
@@ -206,7 +206,7 @@ const VehicleStatusDashboard: React.FC = () => {
         </Col>
         <Col md={6}>
           <Card>
-            <Card.Header>Consumo e Custo de Combustível</Card.Header>
+            <Card.Header>Fuel Consumption and Cost</Card.Header>
             <Card.Body>
               <Bar data={fuelChartData} options={chartOptions} />
             </Card.Body>
@@ -215,21 +215,21 @@ const VehicleStatusDashboard: React.FC = () => {
       </Row>
 
       <Card>
-        <Card.Header>Detalhes dos Veículos</Card.Header>
+        <Card.Header>Vehicle Details</Card.Header>
         <Card.Body>
           <div className="table-responsive">
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Veículo</th>
-                  <th>Placa</th>
-                  <th>Motorista</th>
-                  <th>Quilometragem</th>
-                  <th>Próx. Troca Óleo (km)</th>
-                  <th>Próx. Troca Pneu (km)</th>
-                  <th>Consumo Médio</th>
-                  <th>Total Manutenções</th>
-                  <th>Última Manutenção</th>
+                  <th>Vehicle</th>
+                  <th>License Plate</th>
+                  <th>Driver</th>
+                  <th>Mileage</th>
+                  <th>Next Oil Change (km)</th>
+                  <th>Next Tire Change (km)</th>
+                  <th>Average Consumption</th>
+                  <th>Total Maintenances</th>
+                  <th>Last Maintenance</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,7 +237,7 @@ const VehicleStatusDashboard: React.FC = () => {
                   <tr key={vehicle.carro_id}>
                     <td>{`${vehicle.marca_carro} ${vehicle.modelo_carro}`}</td>
                     <td>{vehicle.placa_carro}</td>
-                    <td>{vehicle.nome_motorista || 'Não atribuído'}</td>
+                    <td>{vehicle.nome_motorista || 'Not assigned'}</td>
                     <td>{vehicle.quilometragem_atual.toLocaleString()} km</td>
                     <td className={vehicle.oleo_atrasado ? 'text-danger' : ''}>
                       {vehicle.data_proxima_troca_oleo.toLocaleString()} km

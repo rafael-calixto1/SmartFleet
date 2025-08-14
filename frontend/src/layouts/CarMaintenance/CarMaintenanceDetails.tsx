@@ -22,10 +22,10 @@ const CarDetailsMaintenanceDetails = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/car-maintenance/${id}`);
         if (!response.ok) {
-          throw new Error("Erro ao carregar os detalhes da manutenção.");
+          throw new Error("Error loading maintenance details.");
         }
         const data = await response.json();
-        console.log("Dados recebidos:", data); // Debugging
+        console.log("Data received:", data); // Debugging
         setMaintenance(data);
 
         // Update form data with fetched values
@@ -39,7 +39,7 @@ const CarDetailsMaintenanceDetails = () => {
         });
       } catch (error) {
         console.error(error);
-        alert("Erro ao carregar os detalhes da manutenção.");
+        alert("Error loading maintenance details.");
       } finally {
         setIsLoading(false);
       }
@@ -77,15 +77,15 @@ const CarDetailsMaintenanceDetails = () => {
       });
 
       if (response.ok) {
-        alert("Manutenção atualizada com sucesso!");
+        alert("Maintenance updated successfully!");
         setIsEditing(false);
         const updatedData = await response.json();
         setMaintenance(updatedData);
       } else {
-        alert("Erro ao atualizar manutenção.");
+        alert("Error updating maintenance.");
       }
     } catch (error) {
-      console.error("Erro ao atualizar a manutenção:", error);
+      console.error("Error updating maintenance:", error);
     }
   };
 
@@ -106,7 +106,7 @@ const CarDetailsMaintenanceDetails = () => {
   if (isLoading) {
     return (
       <div className="container m-5">
-        <p>Carregando...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -114,7 +114,7 @@ const CarDetailsMaintenanceDetails = () => {
   if (!maintenance) {
     return (
       <div className="container m-5">
-        <p className="text-danger">Manutenção não encontrada.</p>
+        <p className="text-danger">Maintenance not found.</p>
       </div>
     );
   }
@@ -122,7 +122,7 @@ const CarDetailsMaintenanceDetails = () => {
   // Render main content
   return (
     <div className="container my-4">
-      <h2 className="mb-4">Detalhes da Manutenção</h2>
+      <h2 className="mb-4">Maintenance Details</h2>
 
       {!isEditing ? (
         <>
@@ -134,41 +134,41 @@ const CarDetailsMaintenanceDetails = () => {
                   <td>{maintenance.id}</td>
                 </tr>
                 <tr>
-                  <th>Tipo</th>
+                  <th>Type</th>
                   <td>{maintenance.maintenance_type}</td>
                 </tr>
                 <tr>
-                  <th>Data</th>
-                  <td>{new Date(maintenance.maintenance_date).toLocaleDateString("pt-BR")}</td>
+                  <th>Date</th>
+                  <td>{new Date(maintenance.maintenance_date).toLocaleDateString("en-US")}</td>
                 </tr>
                 <tr>
-                  <th>Quilometragem</th>
+                  <th>Mileage</th>
                   <td>{maintenance.maintenance_kilometers}</td>
                 </tr>
                 <tr>
-                  <th>Recorrência</th>
+                  <th>Recurrence</th>
                   <td>{maintenance.recurrency}</td>
                 </tr>
                 <tr>
-                  <th>ID do Carro</th>
+                  <th>Car ID</th>
                   <td>{maintenance.car_id}</td>
                 </tr>
                 <tr>
-                  <th>Observação</th>
+                  <th>Observation</th>
                   <td>{maintenance.observation}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <button onClick={() => setIsEditing(true)} className="btn btn-primary">
-            Editar
+            Edit
           </button>
         </>
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="maintenanceType" className="form-label">
-              Tipo de Manutenção
+              Maintenance Type
             </label>
             <input
               type="text"
@@ -182,7 +182,7 @@ const CarDetailsMaintenanceDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="maintenanceDate" className="form-label">
-              Data
+              Date
             </label>
             <input
               type="date"
@@ -196,7 +196,7 @@ const CarDetailsMaintenanceDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="maintenanceKilometers" className="form-label">
-              Quilometragem
+              Mileage
             </label>
             <input
               type="number"
@@ -210,7 +210,7 @@ const CarDetailsMaintenanceDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="recurrency" className="form-label">
-              Recorrência (Km)
+              Recurrence (Km)
             </label>
             <input
               type="number"
@@ -224,7 +224,7 @@ const CarDetailsMaintenanceDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="carId" className="form-label">
-              ID do Carro
+              Car ID
             </label>
             <input
               type="text"
@@ -239,7 +239,7 @@ const CarDetailsMaintenanceDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="observation" className="form-label">
-              Observação
+              Observation
             </label>
             <textarea
               id="observation"
@@ -251,14 +251,14 @@ const CarDetailsMaintenanceDetails = () => {
           </div>
 
           <button type="submit" className="btn btn-success">
-            Salvar
+            Save
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className="btn btn-secondary ms-3"
           >
-            Cancelar
+            Cancel
           </button>
         </form>
       )}

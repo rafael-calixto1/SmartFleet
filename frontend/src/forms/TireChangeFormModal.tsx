@@ -11,7 +11,7 @@ interface TireChangeFormModalProps {
 const TireChangeFormModal: React.FC<TireChangeFormModalProps> = ({ show, handleClose, onSuccess }) => {
   return (
     <Dialog open={show} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Adicionar Troca de Pneus</DialogTitle>
+      <DialogTitle>Add Tire Change</DialogTitle>
       <DialogContent>
         <TireChangeForm onSuccess={() => {
           if (onSuccess) onSuccess();
@@ -20,7 +20,7 @@ const TireChangeFormModal: React.FC<TireChangeFormModalProps> = ({ show, handleC
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="secondary">
-          Fechar
+          Close
         </Button>
       </DialogActions>
     </Dialog>

@@ -46,11 +46,11 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         if (Array.isArray(response.data.drivers)) {
           setDrivers(response.data.drivers);
         } else {
-          throw new Error("Formato de resposta inesperado");
+          throw new Error("Unexpected response format");
         }
       } catch (error) {
         console.error("Error fetching drivers:", error);
-        toast.error("Falha ao carregar motoristas. Tente novamente mais tarde.");
+        toast.error("Failed to load drivers. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -95,13 +95,13 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao salvar o carro');
+        throw new Error('Error saving car');
       }
 
       onSuccess?.();
     } catch (error) {
       console.error('Error:', error);
-      toast.error(initialData?.id ? 'Erro ao atualizar o carro' : 'Erro ao criar o carro');
+      toast.error(initialData?.id ? 'Error updating car' : 'Error creating car');
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +111,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
     <form onSubmit={handleSubmit}>
       <div style={{ display: 'grid', gap: '1rem', padding: '1rem' }}>
         <TextField
-          label="Marca"
+          label="Brand"
           name="make"
           value={carData.make}
           onChange={handleChange}
@@ -121,7 +121,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Modelo"
+          label="Model"
           name="model"
           value={carData.model}
           onChange={handleChange}
@@ -131,7 +131,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Quilometragem Atual"
+          label="Current Kilometers"
           name="current_kilometers"
           type="number"
           value={carData.current_kilometers}
@@ -142,7 +142,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Próxima Troca de Pneu (km)"
+          label="Next Tire Change (km)"
           name="next_tire_change"
           type="number"
           value={carData.next_tire_change}
@@ -161,11 +161,11 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
               disabled={isSubmitting}
             />
           }
-          label="Próxima troca de pneu é maior?"
+          label="Is next tire change bigger?"
         />
 
         <TextField
-          label="Próxima Troca de Óleo (km)"
+          label="Next Oil Change (km)"
           name="next_oil_change"
           type="number"
           value={carData.next_oil_change}
@@ -184,11 +184,11 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
               disabled={isSubmitting}
             />
           }
-          label="Próxima troca de óleo é maior?"
+          label="Is next oil change bigger?"
         />
 
         <TextField
-          label="Placa"
+          label="License Plate"
           name="license_plate"
           value={carData.license_plate}
           onChange={handleChange}
@@ -198,17 +198,17 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <FormControl fullWidth>
-          <InputLabel id="driver-label">Motorista</InputLabel>
+          <InputLabel id="driver-label">Driver</InputLabel>
           <Select
             labelId="driver-label"
             name="driver_id"
             value={carData.driver_id}
             onChange={handleChange}
-            label="Motorista"
+            label="Driver"
             disabled={isSubmitting || loading}
           >
             <MenuItem value={undefined}>
-              <em>Nenhum</em>
+              <em>None</em>
             </MenuItem>
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -223,7 +223,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
           disabled={isSubmitting}
           style={{ marginTop: '1rem' }}
         >
-          {isSubmitting ? 'Salvando...' : (initialData?.id ? 'Atualizar' : 'Adicionar')}
+          {isSubmitting ? 'Saving...' : (initialData?.id ? 'Update' : 'Add')}
         </PrimaryButton>
       </div>
     </form>

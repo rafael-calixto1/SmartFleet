@@ -121,7 +121,7 @@ const FuelingHistoryList = () => {
     setIsModalOpen(false);
     setEditingFueling(null);
     fetchFuelingHistory();
-    toast.success(editingFueling ? 'Abastecimento atualizado com sucesso!' : 'Abastecimento adicionado com sucesso!');
+    toast.success(editingFueling ? 'Fueling updated successfully!' : 'Fueling added successfully!');
   };
 
   const handleEdit = (fueling: FuelingHistoryModel) => {
@@ -144,15 +144,15 @@ const FuelingHistoryList = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao excluir o abastecimento');
+        throw new Error('Error deleting fueling');
       }
 
-      toast.success('Abastecimento excluído com sucesso!');
+      toast.success('Fueling deleted successfully!');
       fetchFuelingHistory();
       setDeleteModalOpen(false);
       setDeletingFueling(null);
     } catch (error) {
-      toast.error('Erro ao excluir o abastecimento');
+      toast.error('Error deleting fueling');
       console.error('Error:', error);
     } finally {
       setIsDeleting(false);
@@ -164,7 +164,7 @@ const FuelingHistoryList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Carregando...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </div>
@@ -183,7 +183,7 @@ const FuelingHistoryList = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Histórico de Abastecimento</h2>
+      <h2 className="mb-4">Fueling History</h2>
       
       {!isModalOpen && (
         <button 
@@ -193,14 +193,14 @@ const FuelingHistoryList = () => {
             setIsModalOpen(true);
           }}
         >
-          Adicionar Novo Abastecimento
+          Add New Fueling
         </button>
       )}
 
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{editingFueling ? 'Editar Abastecimento' : 'Adicionar Novo Abastecimento'}</h5>
+            <h5 className="mb-0">{editingFueling ? 'Edit Fueling' : 'Add New Fueling'}</h5>
             <button 
               className="btn btn-sm btn-outline-secondary" 
               onClick={() => {
@@ -208,7 +208,7 @@ const FuelingHistoryList = () => {
                 setEditingFueling(null);
               }}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
           <div className="card-body">
@@ -228,15 +228,15 @@ const FuelingHistoryList = () => {
           setDeletingFueling(null);
         }}
         onConfirm={handleDelete}
-        title="Confirmar Exclusão"
-        message={`Tem certeza que deseja excluir este abastecimento do veículo ${deletingFueling?.licensePlate}?`}
-        confirmButtonText="Excluir"
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete this fueling for the vehicle ${deletingFueling?.licensePlate}?`}
+        confirmButtonText="Delete"
         isLoading={isDeleting}
       />
 
       {fuelingHistory.length === 0 ? (
         <div className="alert alert-info">
-          Nenhum abastecimento registrado.
+          No fueling registered.
         </div>
       ) : (
         <>
@@ -245,13 +245,13 @@ const FuelingHistoryList = () => {
               <thead>
                 <tr>
                   <th onClick={() => handleSort('id')}>ID</th>
-                  <th onClick={() => handleSort('car_id')}>Veículo</th>
-                  <th onClick={() => handleSort('license_plate')}>Placa</th>
-                  <th onClick={() => handleSort('liters_quantity')}>Quantidade de Combustível</th>
-                  <th onClick={() => handleSort('fuel_type')}>Tipo de Combustível</th>
-                  <th onClick={() => handleSort('fuel_date')}>Data de Abastecimento</th>
-                  <th onClick={() => handleSort('fueling_kilometers')}>Km no Abastecimento</th>
-                  <th>Ações</th>
+                  <th onClick={() => handleSort('car_id')}>Vehicle</th>
+                  <th onClick={() => handleSort('license_plate')}>License Plate</th>
+                  <th onClick={() => handleSort('liters_quantity')}>Fuel Quantity</th>
+                  <th onClick={() => handleSort('fuel_type')}>Fuel Type</th>
+                  <th onClick={() => handleSort('fuel_date')}>Fueling Date</th>
+                  <th onClick={() => handleSort('fueling_kilometers')}>Km at Fueling</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -262,20 +262,20 @@ const FuelingHistoryList = () => {
                     <td>{history.licensePlate}</td>
                     <td>{history.litersQuantity} L</td>
                     <td>{history.fuelType}</td>
-                    <td>{format(new Date(history.fuelDate), 'dd/MM/yyyy HH:mm')}</td>
+                    <td>{format(new Date(history.fuelDate), 'MM/dd/yyyy HH:mm')}</td>
                     <td>{history.fuelingKilometers}</td>
                     <td>
                       <button
                         className="btn btn-sm btn-outline-primary me-2"
                         onClick={() => handleEdit(history)}
                       >
-                        Editar
+                        Edit
                       </button>
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDeleteClick(history)}
                       >
-                        Excluir
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -286,7 +286,7 @@ const FuelingHistoryList = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="d-flex align-items-center">
-              <span className="me-2">Itens por página:</span>
+              <span className="me-2">Items per page:</span>
               <select 
                 className="form-select form-select-sm" 
                 style={{ width: 'auto' }}
@@ -307,7 +307,7 @@ const FuelingHistoryList = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Anterior
+                    Previous
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -326,7 +326,7 @@ const FuelingHistoryList = () => {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Próximo
+                    Next
                   </button>
                 </li>
               </ul>

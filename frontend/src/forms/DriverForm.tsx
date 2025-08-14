@@ -37,11 +37,11 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
       if (driverId) {
         // Update driver
         await axios.put(`${process.env.REACT_APP_BACKEND_URL}/drivers/${driverId}`, driverData);
-        toast.success("Motorista atualizado com sucesso!");
+        toast.success("Driver updated successfully!");
       } else {
         // Add new driver
         await axios.post(`${process.env.REACT_APP_BACKEND_URL}/drivers`, driverData);
-        toast.success("Motorista adicionado com sucesso!");
+        toast.success("Driver added successfully!");
       }
 
       if (onSuccess) {
@@ -52,8 +52,8 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
         onClose();
       }
     } catch (error: any) {
-      console.error("Erro ao salvar motorista:", error);
-      toast.error(error.response?.data?.message || "Erro ao salvar motorista. Tente novamente.");
+      console.error("Error saving driver:", error);
+      toast.error(error.response?.data?.message || "Error saving driver. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -63,7 +63,7 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
       <TextField
         fullWidth
-        label="Nome"
+        label="Name"
         name="name"
         value={driverData.name}
         onChange={handleChange}
@@ -74,7 +74,7 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
 
       <TextField
         fullWidth
-        label="Número da CNH"
+        label="License Number"
         name="license_number"
         value={driverData.license_number}
         onChange={handleChange}
@@ -90,7 +90,7 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
             onClick={onClose}
             disabled={isSubmitting}
           >
-            Cancelar
+            Cancel
           </Button>
         )}
         <Button
@@ -99,7 +99,7 @@ const DriverForm: React.FC<DriverFormProps> = ({ driverId, initialData, onSucces
           color="primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Salvando...' : driverId ? 'Atualizar' : 'Adicionar'}
+          {isSubmitting ? 'Saving...' : driverId ? 'Update' : 'Add'}
         </Button>
       </Box>
     </Box>

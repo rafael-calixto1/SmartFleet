@@ -38,7 +38,7 @@ const MaintenanceTypeList: React.FC = () => {
             setValidLimits(data.validLimits || [10]);
             setError(null);
         } catch (err) {
-            setError('Falha ao carregar os tipos de manutenção. Por favor, tente novamente.');
+            setError('Failed to load maintenance types. Please try again.');
             console.error('Error fetching maintenance types:', err);
         } finally {
             setLoading(false);
@@ -86,9 +86,9 @@ const MaintenanceTypeList: React.FC = () => {
 
             await fetchMaintenanceTypes();
             setShowForm(false);
-            toast.success('Tipo de manutenção adicionado com sucesso!');
+            toast.success('Maintenance type added successfully!');
         } catch (err) {
-            toast.error('Erro ao adicionar tipo de manutenção.');
+            toast.error('Error adding maintenance type.');
             console.error('Error adding maintenance type:', err);
         }
     };
@@ -111,9 +111,9 @@ const MaintenanceTypeList: React.FC = () => {
 
             await fetchMaintenanceTypes();
             setEditingType(null);
-            toast.success('Tipo de manutenção atualizado com sucesso!');
+            toast.success('Maintenance type updated successfully!');
         } catch (err) {
-            toast.error('Erro ao atualizar tipo de manutenção.');
+            toast.error('Error updating maintenance type.');
             console.error('Error updating maintenance type:', err);
         }
     };
@@ -128,13 +128,13 @@ const MaintenanceTypeList: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Erro ao excluir tipo de manutenção.');
+                throw new Error(data.message || 'Error deleting maintenance type.');
             }
 
             await fetchMaintenanceTypes();
             setDeleteModalOpen(false);
             setDeletingType(null);
-            toast.success('Tipo de manutenção excluído com sucesso!');
+            toast.success('Maintenance type deleted successfully!');
         } catch (err: any) {
             toast.error(err.message);
             console.error('Error deleting maintenance type:', err);
@@ -148,7 +148,7 @@ const MaintenanceTypeList: React.FC = () => {
             <div className="container mt-4">
                 <div className="d-flex justify-content-center">
                     <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Carregando...</span>
+                        <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
             </div>
@@ -167,26 +167,26 @@ const MaintenanceTypeList: React.FC = () => {
 
     return (
         <div className="container mt-4">
-            <h2 className="mb-4">Tipos de Manutenção</h2>
+            <h2 className="mb-4">Maintenance Types</h2>
             
             {!showForm && !editingType && (
                 <button 
                     className="btn btn-primary mb-4" 
                     onClick={() => setShowForm(true)}
                 >
-                    Adicionar Novo Tipo de Manutenção
+                    Add New Maintenance Type
                 </button>
             )}
 
             {showForm && !editingType && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Adicionar Tipo de Manutenção</h5>
+                        <h5 className="mb-0">Add Maintenance Type</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setShowForm(false)}
                         >
-                            Cancelar
+                            Cancel
                         </button>
                     </div>
                     <div className="card-body">
@@ -204,12 +204,12 @@ const MaintenanceTypeList: React.FC = () => {
             {editingType && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Editar Tipo de Manutenção</h5>
+                        <h5 className="mb-0">Edit Maintenance Type</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setEditingType(null)}
                         >
-                            Cancelar
+                            Cancel
                         </button>
                     </div>
                     <div className="card-body">
@@ -233,15 +233,15 @@ const MaintenanceTypeList: React.FC = () => {
                     setDeletingType(null);
                 }}
                 onConfirm={() => deletingType?.id && handleDeleteType(deletingType.id)}
-                title="Confirmar Exclusão"
-                message={`Tem certeza que deseja excluir o tipo de manutenção "${deletingType?.name}"?`}
-                confirmButtonText="Excluir"
+                title="Confirm Deletion"
+                message={`Are you sure you want to delete the maintenance type "${deletingType?.name}"?`}
+                confirmButtonText="Delete"
                 isLoading={isDeleting}
             />
 
             {maintenanceTypes.length === 0 ? (
                 <div className="alert alert-info">
-                    Nenhum tipo de manutenção cadastrado.
+                    No maintenance types registered.
                 </div>
             ) : (
                 <>
@@ -249,10 +249,10 @@ const MaintenanceTypeList: React.FC = () => {
                         <table className="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th onClick={() => handleSort('name')}>Nome</th>
-                                    <th onClick={() => handleSort('recurrency')}>Recorrência (Km)</th>
-                                    <th onClick={() => handleSort('recurrency_date')}>Recorrência (Meses)</th>
-                                    <th>Ações</th>
+                                    <th onClick={() => handleSort('name')}>Name</th>
+                                    <th onClick={() => handleSort('recurrency')}>Recurrence (Km)</th>
+                                    <th onClick={() => handleSort('recurrency_date')}>Recurrence (Months)</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -260,13 +260,13 @@ const MaintenanceTypeList: React.FC = () => {
                                     <tr key={type.id}>
                                         <td>{type.name}</td>
                                         <td>{type.recurrency} km</td>
-                                        <td>{type.recurrency_date} meses</td>
+                                        <td>{type.recurrency_date} months</td>
                                         <td>
                                             <button
                                                 className="btn btn-sm btn-outline-primary me-2"
                                                 onClick={() => setEditingType(type)}
                                             >
-                                                Editar
+                                                Edit
                                             </button>
                                             <button
                                                 className="btn btn-sm btn-outline-danger"
@@ -275,7 +275,7 @@ const MaintenanceTypeList: React.FC = () => {
                                                     setDeleteModalOpen(true);
                                                 }}
                                             >
-                                                Excluir
+                                                Delete
                                             </button>
                                         </td>
                                     </tr>
@@ -286,7 +286,7 @@ const MaintenanceTypeList: React.FC = () => {
 
                     <div className="d-flex justify-content-between align-items-center mt-3">
                         <div className="d-flex align-items-center">
-                            <span className="me-2">Itens por página:</span>
+                            <span className="me-2">Items per page:</span>
                             <select 
                                 className="form-select form-select-sm" 
                                 style={{ width: 'auto' }}
@@ -307,7 +307,7 @@ const MaintenanceTypeList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage - 1)}
                                         disabled={currentPage === 1}
                                     >
-                                        Anterior
+                                        Previous
                                     </button>
                                 </li>
                                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -326,7 +326,7 @@ const MaintenanceTypeList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage + 1)}
                                         disabled={currentPage === totalPages}
                                     >
-                                        Próximo
+                                        Next
                                     </button>
                                 </li>
                             </ul>

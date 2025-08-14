@@ -76,7 +76,7 @@ const CarDetails = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cars/${id}`);
         if (!response.ok) {
-          throw new Error("Erro ao carregar os detalhes do carro.");
+          throw new Error("Error loading car details.");
         }
         const data = await response.json();
         setCar(data);
@@ -94,7 +94,7 @@ const CarDetails = () => {
         });
       } catch (error) {
         console.error(error);
-        toast.error("Erro ao carregar os detalhes do carro.");
+        toast.error("Error loading car details.");
       } finally {
         setIsLoading(false);
       }
@@ -105,8 +105,8 @@ const CarDetails = () => {
         const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/drivers`);
         setDrivers(response.data.drivers);
       } catch (error) {
-        console.error("Erro ao carregar motoristas:", error);
-        toast.error("Erro ao carregar a lista de motoristas.");
+        console.error("Error loading drivers:", error);
+        toast.error("Error loading driver list.");
       }
     };
 
@@ -117,8 +117,8 @@ const CarDetails = () => {
         );
         setFuelCostData(response.data);
       } catch (error) {
-        console.error("Erro ao carregar dados de combustível:", error);
-        toast.error("Erro ao carregar dados de custos com combustível.");
+        console.error("Error loading fuel data:", error);
+        toast.error("Error loading fuel cost data.");
       }
     };
 
@@ -129,8 +129,8 @@ const CarDetails = () => {
         );
         setOilChangeCostData(response.data);
       } catch (error) {
-        console.error("Erro ao carregar dados de troca de óleo:", error);
-        toast.error("Erro ao carregar dados de custos com troca de óleo.");
+        console.error("Error loading oil change data:", error);
+        toast.error("Error loading oil change cost data.");
       }
     };
 
@@ -141,8 +141,8 @@ const CarDetails = () => {
         );
         setMaintenanceCountData(response.data);
       } catch (error) {
-        console.error("Erro ao carregar dados de manutenção:", error);
-        toast.error("Erro ao carregar dados de manutenção.");
+        console.error("Error loading maintenance data:", error);
+        toast.error("Error loading maintenance data.");
       }
     };
 
@@ -174,18 +174,18 @@ const CarDetails = () => {
       });
 
       if (response.ok) {
-        toast.success("Carro atualizado com sucesso!");
+        toast.success("Car updated successfully!");
         setIsEditing(false);
         // Refresh car data
         const updatedCarResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cars/${id}`);
         const updatedCarData = await updatedCarResponse.json();
         setCar(updatedCarData);
       } else {
-        toast.error("Erro ao atualizar carro.");
+        toast.error("Error updating car.");
       }
     } catch (error) {
-      console.error("Erro ao atualizar o carro: ", error);
-      toast.error("Erro ao atualizar o carro. Tente novamente.");
+      console.error("Error updating car: ", error);
+      toast.error("Error updating car. Please try again.");
     }
   };
 
@@ -222,7 +222,7 @@ const CarDetails = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Carregando...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </div>
@@ -233,7 +233,7 @@ const CarDetails = () => {
     return (
       <div className="container mt-4">
         <div className="alert alert-danger" role="alert">
-          Carro não encontrado.
+          Car not found.
         </div>
       </div>
     );
@@ -243,14 +243,14 @@ const CarDetails = () => {
     labels: fuelCostData.map(data => data.month),
     datasets: [
       {
-        label: 'Custo Total (R$)',
+        label: 'Total Cost (U$)',
         data: fuelCostData.map(data => data.totalCost),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         borderColor: 'rgb(53, 162, 235)',
         borderWidth: 1,
       },
       {
-        label: 'Litros Abastecidos',
+        label: 'Liters Fueled',
         data: fuelCostData.map(data => data.totalLiters),
         backgroundColor: 'rgba(75, 192, 192, 0.5)',
         borderColor: 'rgb(75, 192, 192)',
@@ -267,7 +267,7 @@ const CarDetails = () => {
       },
       title: {
         display: true,
-        text: 'Custos com Combustível por Mês',
+        text: 'Fuel Costs per Month',
       },
     },
     scales: {
@@ -285,7 +285,7 @@ const CarDetails = () => {
     }),
     datasets: [
       {
-        label: 'Custo de Troca de Óleo (R$)',
+        label: 'Oil Change Cost (U$)',
         data: oilChangeCostData.map(data => data.total_cost),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -302,7 +302,7 @@ const CarDetails = () => {
       },
       title: {
         display: true,
-        text: 'Custos com Troca de Óleo por Mês',
+        text: 'Oil Change Costs per Month',
       },
     },
     scales: {
@@ -310,7 +310,7 @@ const CarDetails = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Custo (R$)'
+          text: 'Cost (U$)'
         }
       },
     },
@@ -324,7 +324,7 @@ const CarDetails = () => {
     }),
     datasets: [
       {
-        label: 'Número de Manutenções',
+        label: 'Number of Maintenances',
         data: maintenanceCountData.map(data => data.maintenance_count),
         borderColor: 'rgb(75, 192, 192)',
         backgroundColor: 'rgba(75, 192, 192, 0.5)',
@@ -341,7 +341,7 @@ const CarDetails = () => {
       },
       title: {
         display: true,
-        text: 'Número de Manutenções por Mês',
+        text: 'Number of Maintenances per Month',
       },
     },
     scales: {
@@ -352,7 +352,7 @@ const CarDetails = () => {
         },
         title: {
           display: true,
-          text: 'Quantidade'
+          text: 'Quantity'
         }
       },
     },
@@ -361,12 +361,12 @@ const CarDetails = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Detalhes do Carro</h2>
+        <h2>Car Details</h2>
         <button 
           className="btn btn-secondary" 
           onClick={() => navigate('/cars')}
         >
-          Voltar para Lista
+          Back to List
         </button>
       </div>
 
@@ -378,23 +378,23 @@ const CarDetails = () => {
                 <div className="col-md-6">
                   <div className="card h-100">
                     <div className="card-header">
-                      <h5 className="card-title mb-0">Informações Básicas</h5>
+                      <h5 className="card-title mb-0">Basic Information</h5>
                     </div>
                     <div className="card-body">
                       <dl className="row mb-0">
-                        <dt className="col-sm-4">Marca</dt>
+                        <dt className="col-sm-4">Brand</dt>
                         <dd className="col-sm-8">{car.make}</dd>
 
-                        <dt className="col-sm-4">Modelo</dt>
+                        <dt className="col-sm-4">Model</dt>
                         <dd className="col-sm-8">{car.model}</dd>
 
-                        <dt className="col-sm-4">Placa</dt>
-                        <dd className="col-sm-8">{car.license_plate || "Não informado"}</dd>
+                        <dt className="col-sm-4">License Plate</dt>
+                        <dd className="col-sm-8">{car.license_plate || "Not informed"}</dd>
 
                         <dt className="col-sm-4">Status</dt>
                         <dd className="col-sm-8">
                           <span className={`badge ${car.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                            {car.status === 'active' ? 'Ativo' : 'Inativo'}
+                            {car.status === 'active' ? 'Active' : 'Inactive'}
                           </span>
                         </dd>
                       </dl>
@@ -405,36 +405,36 @@ const CarDetails = () => {
                 <div className="col-md-6">
                   <div className="card h-100">
                     <div className="card-header">
-                      <h5 className="card-title mb-0">Informações de Manutenção</h5>
+                      <h5 className="card-title mb-0">Maintenance Information</h5>
                     </div>
                     <div className="card-body">
                       <dl className="row mb-0">
-                        <dt className="col-sm-4">Quilometragem</dt>
+                        <dt className="col-sm-4">Mileage</dt>
                         <dd className="col-sm-8">{car.current_kilometers} km</dd>
 
-                        <dt className="col-sm-4">Próxima Troca de Pneu</dt>
+                        <dt className="col-sm-4">Next Tire Change</dt>
                         <dd className="col-sm-8">
                           <span className={car.is_next_tire_change_bigger ? 'text-danger' : ''}>
                             {car.next_tire_change} km
                             {car.is_next_tire_change_bigger && 
-                              <span className="badge bg-danger ms-2">Atrasada</span>
+                              <span className="badge bg-danger ms-2">Overdue</span>
                             }
                           </span>
                         </dd>
 
-                        <dt className="col-sm-4">Próxima Troca de Óleo</dt>
+                        <dt className="col-sm-4">Next Oil Change</dt>
                         <dd className="col-sm-8">
                           <span className={car.is_next_oil_change_bigger ? 'text-danger' : ''}>
                             {car.next_oil_change} km
                             {car.is_next_oil_change_bigger && 
-                              <span className="badge bg-danger ms-2">Atrasada</span>
+                              <span className="badge bg-danger ms-2">Overdue</span>
                             }
                           </span>
                         </dd>
 
-                        <dt className="col-sm-4">Motorista</dt>
+                        <dt className="col-sm-4">Driver</dt>
                         <dd className="col-sm-8">
-                          {drivers.find(d => d.id === car.driver_id)?.name || "Não atribuído"}
+                          {drivers.find(d => d.id === car.driver_id)?.name || "Not assigned"}
                         </dd>
                       </dl>
                     </div>
@@ -444,7 +444,7 @@ const CarDetails = () => {
 
               <div className="d-flex justify-content-end">
                 <button onClick={handleEdit} className="btn btn-primary">
-                  Editar Informações
+                  Edit Information
                 </button>
               </div>
             </>
@@ -453,7 +453,7 @@ const CarDetails = () => {
               <div className="row">
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label htmlFor="make" className="form-label">Marca</label>
+                    <label htmlFor="make" className="form-label">Brand</label>
                     <input
                       type="text"
                       className="form-control"
@@ -466,7 +466,7 @@ const CarDetails = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="model" className="form-label">Modelo</label>
+                    <label htmlFor="model" className="form-label">Model</label>
                     <input
                       type="text"
                       className="form-control"
@@ -479,7 +479,7 @@ const CarDetails = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="license_plate" className="form-label">Placa</label>
+                    <label htmlFor="license_plate" className="form-label">License Plate</label>
                     <input
                       type="text"
                       className="form-control"
@@ -492,7 +492,7 @@ const CarDetails = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="driver_id" className="form-label">Motorista</label>
+                    <label htmlFor="driver_id" className="form-label">Driver</label>
                     <select
                       className="form-select"
                       id="driver_id"
@@ -500,7 +500,7 @@ const CarDetails = () => {
                       value={formData.driver_id}
                       onChange={handleChange}
                     >
-                      <option value="">Selecione um motorista</option>
+                      <option value="">Select a driver</option>
                       {drivers.map(driver => (
                         <option key={driver.id} value={driver.id}>
                           {driver.name}
@@ -512,7 +512,7 @@ const CarDetails = () => {
 
                 <div className="col-md-6">
                   <div className="mb-3">
-                    <label htmlFor="current_kilometers" className="form-label">Quilometragem Atual</label>
+                    <label htmlFor="current_kilometers" className="form-label">Current Mileage</label>
                     <input
                       type="number"
                       className="form-control"
@@ -525,7 +525,7 @@ const CarDetails = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="next_tire_change" className="form-label">Próxima Troca de Pneu (Km)</label>
+                    <label htmlFor="next_tire_change" className="form-label">Next Tire Change (Km)</label>
                     <input
                       type="number"
                       className="form-control"
@@ -538,7 +538,7 @@ const CarDetails = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="next_oil_change" className="form-label">Próxima Troca de Óleo (Km)</label>
+                    <label htmlFor="next_oil_change" className="form-label">Next Oil Change (Km)</label>
                     <input
                       type="number"
                       className="form-control"
@@ -559,8 +559,8 @@ const CarDetails = () => {
                       value={formData.status}
                       onChange={handleChange}
                     >
-                      <option value="active">Ativo</option>
-                      <option value="inactive">Inativo</option>
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
                     </select>
                   </div>
                 </div>
@@ -568,10 +568,10 @@ const CarDetails = () => {
 
               <div className="d-flex justify-content-end gap-2">
                 <button type="button" onClick={handleCancel} className="btn btn-secondary">
-                  Cancelar
+                  Cancel
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Salvar Alterações
+                  Save Changes
                 </button>
               </div>
             </form>
@@ -582,13 +582,13 @@ const CarDetails = () => {
       {/* Date Range Controls */}
       <div className="card mb-4">
         <div className="card-header">
-          <h5 className="card-title mb-0">Período de Análise</h5>
+          <h5 className="card-title mb-0">Analysis Period</h5>
         </div>
         <div className="card-body">
           <div className="row">
             <div className="col-md-6">
               <div className="form-group">
-                <label htmlFor="startDate" className="form-label">Data Inicial:</label>
+                <label htmlFor="startDate" className="form-label">Start Date:</label>
                 <input
                   type="date"
                   className="form-control"
@@ -601,7 +601,7 @@ const CarDetails = () => {
             </div>
             <div className="col-md-6">
               <div className="form-group">
-                <label htmlFor="endDate" className="form-label">Data Final:</label>
+                <label htmlFor="endDate" className="form-label">End Date:</label>
                 <input
                   type="date"
                   className="form-control"
@@ -619,7 +619,7 @@ const CarDetails = () => {
       {/* Fuel Cost Dashboard */}
       <div className="card mb-4">
         <div className="card-header">
-          <h5 className="card-title mb-0">Dashboard de Custos com Combustível</h5>
+          <h5 className="card-title mb-0">Fuel Cost Dashboard</h5>
         </div>
         <div className="card-body">
           {fuelCostData.length > 0 ? (
@@ -628,7 +628,7 @@ const CarDetails = () => {
             </div>
           ) : (
             <div className="alert alert-info">
-              Não há dados de abastecimento registrados para este veículo no período selecionado.
+              There is no fueling data registered for this vehicle in the selected period.
             </div>
           )}
         </div>
@@ -637,7 +637,7 @@ const CarDetails = () => {
       {/* Oil Change Cost Dashboard - Full Width */}
       <div className="card mb-4">
         <div className="card-header">
-          <h5 className="card-title mb-0">Dashboard de Custos com Troca de Óleo</h5>
+          <h5 className="card-title mb-0">Oil Change Cost Dashboard</h5>
         </div>
         <div className="card-body">
           {oilChangeCostData.length > 0 ? (
@@ -646,7 +646,7 @@ const CarDetails = () => {
             </div>
           ) : (
             <div className="alert alert-info">
-              Não há dados de troca de óleo registrados para este veículo no período selecionado.
+              There is no oil change data registered for this vehicle in the selected period.
             </div>
           )}
         </div>
@@ -659,7 +659,7 @@ const CarDetails = () => {
           {/* Maintenance Count Dashboard */}
           <div className="card mb-4">
             <div className="card-header">
-              <h5 className="card-title mb-0">Dashboard de Manutenções</h5>
+              <h5 className="card-title mb-0">Maintenance Dashboard</h5>
             </div>
             <div className="card-body">
               {maintenanceCountData.length > 0 ? (
@@ -668,7 +668,7 @@ const CarDetails = () => {
                 </div>
               ) : (
                 <div className="alert alert-info">
-                  Não há dados de manutenção registrados para este veículo no período selecionado.
+                  There is no maintenance data registered for this vehicle in the selected period.
                 </div>
               )}
             </div>

@@ -26,7 +26,7 @@ const DriverList = () => {
     try {
       const response = await fetch(`${baseUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`);
       if (!response.ok) {
-        throw new Error('Algo deu errado!');
+        throw new Error('Something went wrong!');
       }
 
       const responseData = await response.json();
@@ -81,10 +81,10 @@ const DriverList = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Erro ao excluir o motorista');
+        throw new Error(data.message || 'Error deleting driver');
       }
 
-      toast.success('Motorista excluído com sucesso!');
+      toast.success('Driver deleted successfully!');
       fetchDrivers();
       setDeleteModalOpen(false);
       setDeletingDriver(null);
@@ -100,7 +100,7 @@ const DriverList = () => {
     setIsModalOpen(false);
     setSelectedDriver(null);
     fetchDrivers();
-    toast.success(selectedDriver ? 'Motorista atualizado com sucesso!' : 'Motorista adicionado com sucesso!');
+    toast.success(selectedDriver ? 'Driver updated successfully!' : 'Driver added successfully!');
   };
 
   if (isLoading) {
@@ -108,7 +108,7 @@ const DriverList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Carregando...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </div>
@@ -127,21 +127,21 @@ const DriverList = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Lista de Motoristas</h2>
+      <h2 className="mb-4">Driver List</h2>
       
       {!isModalOpen && (
         <button 
           className="btn btn-primary mb-4" 
           onClick={() => setIsModalOpen(true)}
         >
-          Adicionar Novo Motorista
+          Add New Driver
         </button>
       )}
 
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{selectedDriver ? 'Editar Motorista' : 'Adicionar Novo Motorista'}</h5>
+            <h5 className="mb-0">{selectedDriver ? 'Edit Driver' : 'Add New Driver'}</h5>
             <button 
               className="btn btn-sm btn-outline-secondary" 
               onClick={() => {
@@ -149,7 +149,7 @@ const DriverList = () => {
                 setSelectedDriver(null);
               }}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
           <div className="card-body">
@@ -172,15 +172,15 @@ const DriverList = () => {
           setDeletingDriver(null);
         }}
         onConfirm={() => deletingDriver?.id && handleDelete(deletingDriver.id)}
-        title="Confirmar Exclusão"
-        message={`Tem certeza que deseja excluir o motorista "${deletingDriver?.name}"?`}
-        confirmButtonText="Excluir"
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the driver "${deletingDriver?.name}"?`}
+        confirmButtonText="Delete"
         isLoading={isDeleting}
       />
 
       {drivers.length === 0 ? (
         <div className="alert alert-info">
-          Nenhum motorista cadastrado.
+          No drivers registered.
         </div>
       ) : (
         <div className="table-responsive">
@@ -188,9 +188,9 @@ const DriverList = () => {
             <thead>
               <tr>
                 <th onClick={() => handleSort('id')}>ID</th>
-                <th onClick={() => handleSort('name')}>Nome</th>
-                <th onClick={() => handleSort('license_number')}>Número da CNH</th>
-                <th>Ações</th>
+                <th onClick={() => handleSort('name')}>Name</th>
+                <th onClick={() => handleSort('license_number')}>License Number</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -204,7 +204,7 @@ const DriverList = () => {
                       className="btn btn-sm btn-outline-primary me-2"
                       onClick={() => handleEdit(driver)}
                     >
-                      Editar
+                      Edit
                     </button>
                     <button
                       className="btn btn-sm btn-outline-danger"
@@ -213,7 +213,7 @@ const DriverList = () => {
                         setDeleteModalOpen(true);
                       }}
                     >
-                      Excluir
+                      Delete
                     </button>
                   </td>
                 </tr>
@@ -233,7 +233,7 @@ const DriverList = () => {
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  Anterior
+                  Previous
                 </button>
               </li>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -252,7 +252,7 @@ const DriverList = () => {
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  Próximo
+                  Next
                 </button>
               </li>
             </ul>

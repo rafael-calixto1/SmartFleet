@@ -45,12 +45,12 @@ const CarList = () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/drivers`);
         if (!response.ok) {
-          throw new Error('Erro ao carregar motoristas.');
+          throw new Error('Error loading drivers.');
         }
         const data = await response.json();
         setDrivers(data.drivers);
       } catch (error: any) {
-        setHttpError(error.message || 'Erro desconhecido ao carregar motoristas.');
+        setHttpError(error.message || 'Unknown error loading drivers.');
       }
     };
 
@@ -65,7 +65,7 @@ const CarList = () => {
         `${baseUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&status=${statusFilter}`
       );
         if (!response.ok) {
-          throw new Error('Erro ao carregar os dados.');
+          throw new Error('Error loading data.');
         }
         const data = await response.json();
         const loadedCars: CarModel[] = data.cars.map((car: any) => ({
@@ -95,7 +95,7 @@ const CarList = () => {
         setValidLimits(data.validLimits);
       }
       } catch (error: any) {
-        setHttpError(error.message || 'Erro desconhecido.');
+        setHttpError(error.message || 'Unknown error.');
       } finally {
         setIsLoading(false);
       }
@@ -121,13 +121,13 @@ const CarList = () => {
 
   const handleSort = (field: string) => {
     const fieldMapping: Record<string, string> = {
-      'marca': 'make',
-      'Modelo': 'model',
-      'Km Atual': 'current_kilometers',
-      'Próxima Troca de Pneu': 'next_tire_change',
-      'Troca de Óleo Necessária': 'next_oil_change',
-      'Placa': 'license_plate',
-      'Nome do Motorista': 'driver_name',
+      'Brand': 'make',
+      'Model': 'model',
+      'Current Km': 'current_kilometers',
+      'Next Tire Change': 'next_tire_change',
+      'Next Oil Change': 'next_oil_change',
+      'License Plate': 'license_plate',
+      'Driver Name': 'driver_name',
       'status': 'status'
     };
 
@@ -175,16 +175,16 @@ const CarList = () => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success('Carro excluído com sucesso!');
+        toast.success('Car deleted successfully!');
         fetchCars();
         setDeleteModalOpen(false);
         setDeletingCar(null);
       } else {
-        throw new Error(data.message || 'Falha ao excluir o carro');
+        throw new Error(data.message || 'Failed to delete car');
       }
     } catch (error: any) {
       console.error('Delete error:', error);
-      toast.error(error.message || 'Erro ao excluir o carro. Por favor, tente novamente.');
+      toast.error(error.message || 'Error deleting car. Please try again.');
     } finally {
       setIsDeleting(false);
     }
@@ -194,7 +194,7 @@ const CarList = () => {
     setIsModalOpen(false);
     setEditingCar(null);
     fetchCars();
-    toast.success(editingCar ? 'Carro atualizado com sucesso!' : 'Carro adicionado com sucesso!');
+    toast.success(editingCar ? 'Car updated successfully!' : 'Car added successfully!');
   };
 
   const handleStatusChange = async (car: CarModel) => {
@@ -210,14 +210,14 @@ const CarList = () => {
       });
 
       if (response.ok) {
-        toast.success(`Carro ${car.status === 'active' ? 'desativado' : 'ativado'} com sucesso!`);
+        toast.success(`Car ${car.status === 'active' ? 'deactivated' : 'activated'} successfully!`);
         fetchCars();
       } else {
-        throw new Error('Falha ao alterar o status do carro');
+        throw new Error('Failed to change car status');
       }
     } catch (error) {
       console.error('Status change error:', error);
-      toast.error('Erro ao alterar o status do carro');
+      toast.error('Error changing car status');
     }
   };
 
@@ -230,7 +230,7 @@ const CarList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Carregando...</span>
+            <span className="visually-hidden">Loading...</span>
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ const CarList = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Lista de Carros</h2>
+        <h2>Car List</h2>
         <div className="d-flex gap-2 align-items-center">
           <div className="d-flex align-items-center">
             <label className="me-2" htmlFor="statusFilter">Status:</label>
@@ -261,16 +261,16 @@ const CarList = () => {
               onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
               style={{ width: 'auto' }}
             >
-              <option value="all">Todos</option>
-              <option value="active">Ativos</option>
-              <option value="inactive">Inativos</option>
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
             </select>
           </div>
           <button 
             className="btn btn-primary" 
             onClick={() => setIsModalOpen(true)}
           >
-            Adicionar Novo Carro
+            Add New Car
           </button>
         </div>
       </div>
@@ -280,14 +280,14 @@ const CarList = () => {
           className="btn btn-primary mb-4" 
           onClick={() => setIsModalOpen(true)}
         >
-          Adicionar Novo Carro
+          Add New Car
         </button>
       )}
 
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{editingCar ? 'Editar Carro' : 'Adicionar Novo Carro'}</h5>
+            <h5 className="mb-0">{editingCar ? 'Edit Car' : 'Add New Car'}</h5>
             <button 
               className="btn btn-sm btn-outline-secondary" 
               onClick={() => {
@@ -295,7 +295,7 @@ const CarList = () => {
                 setEditingCar(null);
               }}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
           <div className="card-body">
@@ -309,7 +309,7 @@ const CarList = () => {
 
       {cars.length === 0 ? (
         <div className="alert alert-info">
-          Nenhum carro cadastrado.
+          No cars registered.
         </div>
       ) : (
         <>
@@ -317,15 +317,15 @@ const CarList = () => {
             <table className="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th onClick={() => handleSort('marca')}>Marca</th>
-                  <th onClick={() => handleSort('Modelo')}>Modelo</th>
-                  <th onClick={() => handleSort('Placa')}>Placa</th>
-                  <th onClick={() => handleSort('Km Atual')}>Km Atual</th>
-                  <th onClick={() => handleSort('Próxima Troca de Pneu')}>Próxima Troca de Pneu</th>
-                  <th onClick={() => handleSort('Troca de Óleo Necessária')}>Próxima Troca de Óleo</th>
-                  <th onClick={() => handleSort('Nome do Motorista')}>Motorista</th>
+                  <th onClick={() => handleSort('Brand')}>Brand</th>
+                  <th onClick={() => handleSort('Model')}>Model</th>
+                  <th onClick={() => handleSort('License Plate')}>License Plate</th>
+                  <th onClick={() => handleSort('Current Km')}>Current Km</th>
+                  <th onClick={() => handleSort('Next Tire Change')}>Next Tire Change</th>
+                  <th onClick={() => handleSort('Next Oil Change')}>Next Oil Change</th>
+                  <th onClick={() => handleSort('Driver Name')}>Driver</th>
                   <th onClick={() => handleSort('status')}>Status</th>
-                  <th>Ações</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -361,10 +361,10 @@ const CarList = () => {
                     <td>{car.current_kilometers}</td>
                     <td>{car.next_tire_change}</td>
                     <td>{car.next_oil_change}</td>
-                    <td>{car.driver_name || 'Não atribuído'}</td>
+                    <td>{car.driver_name || 'Not assigned'}</td>
                     <td>
                       <span className={`badge ${car.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                        {car.status === 'active' ? 'Ativo' : 'Inativo'}
+                        {car.status === 'active' ? 'Active' : 'Inactive'}
                       </span>
                     </td>
                     <td>
@@ -373,19 +373,19 @@ const CarList = () => {
                           className="btn btn-sm btn-outline-primary"
                           onClick={() => handleEdit(car)}
                         >
-                          Editar
+                          Edit
                         </button>
                         <button
                           className="btn btn-sm btn-outline-warning"
                           onClick={() => handleStatusChange(car)}
                         >
-                          {car.status === 'active' ? 'Desativar' : 'Ativar'}
+                          {car.status === 'active' ? 'Deactivate' : 'Activate'}
                         </button>
                         <button
                           className="btn btn-sm btn-outline-danger"
                           onClick={() => handleDeleteClick(car)}
                         >
-                          Excluir
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -397,7 +397,7 @@ const CarList = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="d-flex align-items-center">
-              <span className="me-2">Itens por página:</span>
+              <span className="me-2">Items per page:</span>
               <select 
                 className="form-select form-select-sm" 
                 style={{ width: 'auto' }}
@@ -418,7 +418,7 @@ const CarList = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Anterior
+                    Previous
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -437,7 +437,7 @@ const CarList = () => {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Próximo
+                    Next
                   </button>
                 </li>
               </ul>
@@ -453,9 +453,9 @@ const CarList = () => {
           setDeletingCar(null);
         }}
         onConfirm={handleDelete}
-        title="Confirmar Exclusão"
-        message={`Tem certeza que deseja excluir o carro ${deletingCar?.make} ${deletingCar?.model} - ${deletingCar?.license_plate}?`}
-        confirmButtonText="Excluir"
+        title="Confirm Deletion"
+        message={`Are you sure you want to delete the car ${deletingCar?.make} ${deletingCar?.model} - ${deletingCar?.license_plate}?`}
+        confirmButtonText="Delete"
         isLoading={isDeleting}
         />
     </div>

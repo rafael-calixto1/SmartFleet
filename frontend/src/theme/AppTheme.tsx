@@ -131,9 +131,9 @@ const AppTheme = createTheme({
     },
     MuiTablePagination: {
       defaultProps: {
-        labelRowsPerPage: 'Linhas por página:',
+        labelRowsPerPage: 'Rows per page:',
         labelDisplayedRows: ({ from, to, count }) =>
-          `${from}-${to} de ${count !== -1 ? count : `mais de ${to}`}`,
+          `${from}-${to} of ${count !== -1 ? count : `more than ${to}`}`,
       },
     },
     MuiPaper: {

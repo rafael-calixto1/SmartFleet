@@ -72,8 +72,8 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           setMaintenanceTypes([]);
         }
       } catch (error) {
-        console.error("Erro ao carregar dados:", error);
-        toast.error("Não foi possível carregar os dados necessários.");
+        console.error("Error loading data:", error);
+        toast.error("Could not load necessary data.");
         setMaintenanceTypes([]);
       }
     };
@@ -85,21 +85,21 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
     const newErrors: { [key: string]: string } = {};
 
     if (!maintenanceData.car_id) {
-      newErrors.car_id = 'Selecione um carro';
+      newErrors.car_id = 'Select a car';
     }
 
     if (!maintenanceData.maintenance_type_id) {
-      newErrors.maintenance_type_id = 'Selecione o tipo de manutenção';
+      newErrors.maintenance_type_id = 'Select a maintenance type';
     }
 
     if (!maintenanceData.maintenance_date) {
-      newErrors.maintenance_date = 'Selecione a data da manutenção';
+      newErrors.maintenance_date = 'Select the maintenance date';
     }
 
     if (!maintenanceData.maintenance_kilometers) {
-      newErrors.maintenance_kilometers = 'Digite a quilometragem';
+      newErrors.maintenance_kilometers = 'Enter the mileage';
     } else if (parseInt(maintenanceData.maintenance_kilometers) < 0) {
-      newErrors.maintenance_kilometers = 'A quilometragem não pode ser negativa';
+      newErrors.maintenance_kilometers = 'Mileage cannot be negative';
     }
 
     setErrors(newErrors);
@@ -159,7 +159,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       });
 
       if (response.status === 200 || response.status === 201) {
-        toast.success(initialData?.id ? 'Manutenção atualizada com sucesso!' : 'Manutenção registrada com sucesso!');
+        toast.success(initialData?.id ? 'Maintenance updated successfully!' : 'Maintenance registered successfully!');
         
         setTimeout(() => {
           if (onSuccess) {
@@ -172,8 +172,8 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
         }, 500);
       }
     } catch (error: any) {
-      console.error("Erro ao registrar manutenção:", error);
-      toast.error(error.response?.data?.message || "Erro ao registrar manutenção");
+      console.error("Error registering maintenance:", error);
+      toast.error(error.response?.data?.message || "Error registering maintenance");
     } finally {
       setIsSubmitting(false);
     }
@@ -182,7 +182,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
       <div className="mb-3">
-        <label htmlFor="car_id" className="form-label">Carro</label>
+        <label htmlFor="car_id" className="form-label">Car</label>
         <select
           id="car_id"
           name="car_id"
@@ -191,7 +191,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onChange={handleChange}
           disabled={isSubmitting}
         >
-          <option value="">Selecione um carro</option>
+          <option value="">Select a car</option>
           {cars.map((car) => (
             <option key={car.id} value={car.id}>
               {car.model} - {car.license_plate}
@@ -206,7 +206,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_type_id" className="form-label">Tipo de Manutenção</label>
+        <label htmlFor="maintenance_type_id" className="form-label">Maintenance Type</label>
         <select
           id="maintenance_type_id"
           name="maintenance_type_id"
@@ -215,7 +215,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onChange={handleChange}
           disabled={isSubmitting}
         >
-          <option value="">Selecione o tipo de manutenção</option>
+          <option value="">Select a maintenance type</option>
           {maintenanceTypes.map((type) => (
             <option key={type.id} value={type.id}>
               {type.name}
@@ -230,7 +230,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_date" className="form-label">Data da manutenção</label>
+        <label htmlFor="maintenance_date" className="form-label">Maintenance Date</label>
         <input
           type="date"
           id="maintenance_date"
@@ -248,7 +248,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_kilometers" className="form-label">Quilometragem</label>
+        <label htmlFor="maintenance_kilometers" className="form-label">Mileage</label>
         <input
           type="number"
           id="maintenance_kilometers"
@@ -266,7 +266,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="recurrency" className="form-label">Recorrência (Km)</label>
+        <label htmlFor="recurrency" className="form-label">Recurrence (Km)</label>
         <input
           type="number"
           id="recurrency"
@@ -277,7 +277,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           disabled={true}
         />
         <small className="form-text text-muted">
-          A recorrência é definida pelo tipo de manutenção selecionado.
+          Recurrence is defined by the selected maintenance type.
         </small>
       </div>
 
@@ -288,7 +288,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onClick={onClose}
           disabled={isSubmitting}
         >
-          Cancelar
+          Cancel
         </button>
         <button 
           type="submit" 
@@ -298,10 +298,10 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           {isSubmitting ? (
             <>
               <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              Salvando...
+              Saving...
             </>
           ) : (
-            initialData?.id ? 'Atualizar' : 'Salvar'
+            initialData?.id ? 'Update' : 'Save'
           )}
         </button>
       </div>

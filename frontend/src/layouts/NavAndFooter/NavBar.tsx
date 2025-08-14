@@ -129,7 +129,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Veículos"
+                  primary="Vehicles"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -155,7 +155,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Lista de Carros"
+                    primary="Car List"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -176,7 +176,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Adicionar Carro"
+                    primary="Add Car"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -237,7 +237,7 @@ export const Navbar = () => {
               />
               {drawerOpen && (
                 <ListItemText
-                  primary="Abastecimentos"
+                  primary="Fueling"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
               )}
@@ -266,7 +266,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Manutenção"
+                  primary="Maintenance"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -292,7 +292,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Histórico de Manutenção"
+                    primary="Maintenance History"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -311,7 +311,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Tipos de Manutenção"
+                    primary="Maintenance Types"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -344,7 +344,7 @@ export const Navbar = () => {
           </Collapse>
 
           {[
-            { to: "/drivers", icon: faUser, label: "Motoristas" },
+            { to: "/drivers", icon: faUser, label: "Drivers" },
           ].map((item) => (
             <ListItem
               key={item.to}
@@ -401,7 +401,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Trocas de Óleo"
+                  primary="Oil Changes"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -427,7 +427,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Histórico"
+                    primary="History"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -451,7 +451,7 @@ export const Navbar = () => {
                 />
                 {drawerOpen && (
                   <ListItemText
-                    primary="Dashboard de Custos"
+                    primary="Cost Dashboard"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -460,8 +460,8 @@ export const Navbar = () => {
           </Collapse>
 
           {[
-            { to: "/tire-change-history", icon: faCar, label: "Trocas de Pneus" },
-            { to: "/car-maintenance", icon: faWrench, label: "Manutenção de Veículos" },
+            { to: "/tire-change-history", icon: faCar, label: "Tire Changes" },
+            { to: "/car-maintenance", icon: faWrench, label: "Vehicle Maintenance" },
           ].map((item) => (
             <ListItem
               key={item.to}

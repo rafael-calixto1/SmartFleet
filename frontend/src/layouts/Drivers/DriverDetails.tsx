@@ -20,7 +20,7 @@ const DriverDetails = () => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/drivers/${id}`);
       if (!response.ok) {
-        throw new Error("Erro ao carregar os detalhes do motorista.");
+        throw new Error("Error loading driver details.");
       }
       const data = await response.json();
       setDriver(data);
@@ -50,9 +50,9 @@ const DriverDetails = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Verifique se os campos name e license_number são válidos
+    // Check if the name and license_number fields are valid
     if (!formData.name || !formData.license_number) {
-      toast.error("Nome e número da CNH são obrigatórios.");
+      toast.error("Name and license number are required.");
       return;
     }
 
@@ -66,25 +66,25 @@ const DriverDetails = () => {
       });
 
       if (response.ok) {
-        toast.success("Motorista atualizado com sucesso!");
+        toast.success("Driver updated successfully!");
         setIsEditing(false);
-        fetchDriver(); // Recarrega os dados do motorista após a atualização
+        fetchDriver(); // Reload driver data after update
       } else {
-        toast.error("Erro ao atualizar motorista.");
+        toast.error("Error updating driver.");
       }
     } catch (error) {
-      console.error("Erro ao atualizar o motorista: ", error);
-      toast.error("Erro ao atualizar o motorista. Tente novamente.");
+      console.error("Error updating driver: ", error);
+      toast.error("Error updating driver. Please try again.");
     }
   };
 
   const handleDelete = async () => {
     confirmAlert({
-      title: 'Confirmação de Exclusão',
-      message: 'Tem certeza de que deseja excluir este motorista?',
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this driver?',
       buttons: [
         {
-          label: 'Sim',
+          label: 'Yes',
           onClick: async () => {
             try {
               const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/drivers/${id}`, {
@@ -92,19 +92,19 @@ const DriverDetails = () => {
               });
 
               if (response.ok) {
-                toast.success("Motorista excluído com sucesso!");
+                toast.success("Driver deleted successfully!");
                 navigate("/drivers");
               } else {
-                toast.error("Erro ao excluir motorista.");
+                toast.error("Error deleting driver.");
               }
             } catch (error) {
-              console.error("Erro ao excluir o motorista: ", error);
-              toast.error("Erro ao excluir o motorista. Tente novamente.");
+              console.error("Error deleting driver: ", error);
+              toast.error("Error deleting driver. Please try again.");
             }
           }
         },
         {
-          label: 'Não',
+          label: 'No',
           onClick: () => {}
         }
       ]
@@ -126,7 +126,7 @@ const DriverDetails = () => {
   if (isLoading) {
     return (
       <div className="container m-5">
-        <p>Carregando...</p>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -134,14 +134,14 @@ const DriverDetails = () => {
   if (!driver) {
     return (
       <div className="container m-5">
-        <p className="text-danger">Motorista não encontrado.</p>
+        <p className="text-danger">Driver not found.</p>
       </div>
     );
   }
 
   return (
     <div className="container my-4" >
-      <h2 className="mb-4">Detalhes do Motorista</h2>
+      <h2 className="mb-4">Driver Details</h2>
 
       {!isEditing ? (
         <>
@@ -153,28 +153,28 @@ const DriverDetails = () => {
                   <td>{driver.id}</td>
                 </tr>
                 <tr>
-                  <th>Nome</th>
+                  <th>Name</th>
                   <td>{driver.name}</td>
                 </tr>
                 <tr>
-                  <th>Número da CNH</th>
+                  <th>License Number</th>
                   <td>{driver.license_number}</td>
                 </tr>
               </tbody>
             </table>
           </div>
           <button onClick={handleEdit} className="btn btn-success">
-            Editar
+            Edit
           </button>
           <button onClick={handleDelete} className="btn btn-danger ms-3">
-            Excluir
+            Delete
           </button>
         </>
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
-              Nome
+              Name
             </label>
             <input
               type="text"
@@ -188,7 +188,7 @@ const DriverDetails = () => {
 
           <div className="mb-3">
             <label htmlFor="license_number" className="form-label">
-              Número da CNH
+              License Number
             </label>
             <input
               type="text"
@@ -201,21 +201,21 @@ const DriverDetails = () => {
           </div>
 
           <button type="submit" className="btn btn-success">
-            Salvar
+            Save
           </button>
           <button
             type="button"
             onClick={handleCancel}
             className="btn btn-secondary ms-3"
           >
-            Cancelar
+            Cancel
           </button>
           <button
             type="button"
             onClick={handleDelete}
             className="btn btn-danger ms-3"
           >
-            Excluir
+            Delete
           </button>
         </form>
       )}

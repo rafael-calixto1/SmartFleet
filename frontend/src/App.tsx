@@ -7,10 +7,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-// Usando React.lazy para carregar componentes de forma assíncrona
+// Using React.lazy to load components asynchronously
 const Dashboard = React.lazy(() => import('./layouts/Dashboard/Dashboard'));
 const DriverList = React.lazy(() => import('./layouts/Drivers/DriverList'));
-const DriverDetails = React.lazy(() => import('./layouts/Drivers/DriverDetails'));  // Novo componente para detalhes do motorista
+const DriverDetails = React.lazy(() => import('./layouts/Drivers/DriverDetails'));  // New component for driver details
 const CarList = React.lazy(() => import('./layouts/Cars/CarList'));
 const CarDetails = React.lazy(() => import('./layouts/Cars/CarDetails'));
 const FuelingHistoryList = React.lazy(() => import('./layouts/Fueling/FuelingHistoryList'));
@@ -18,17 +18,17 @@ const OilChangeHistoryList = React.lazy(() => import('./layouts/Oil/OilChangeHis
 const OilChangeCostDashboard = React.lazy(() => import('./layouts/Oil/OilChangeCostDashboard'));
 const TireChangeHistoryList = React.lazy(() => import('./layouts/Tire/TireChangeHistoryList'));
 const CarMaintenanceList = React.lazy(() => import('./layouts/CarMaintenance/CarMaintenanceList'));
-const CarMaintenanceDetails = React.lazy(() => import('./layouts/CarMaintenance/CarMaintenanceDetails'));  // Carregar o componente de detalhes da manutenção
+const CarMaintenanceDetails = React.lazy(() => import('./layouts/CarMaintenance/CarMaintenanceDetails'));  // Load the maintenance details component
 const MaintenanceTypeList = React.lazy(() => import('./layouts/Maintenance/MaintenanceTypeList'));
 const MaintenanceHistoryList = React.lazy(() => import('./layouts/Maintenance/MaintenanceHistoryList'));
 const MaintenanceDashboard = React.lazy(() => import('./layouts/Maintenance/MaintenanceDashboard'));
 const VehicleStatusDashboard = React.lazy(() => import('./layouts/Dashboard/VehicleStatusDashboard'));
 
-// Página de erro 404
+// 404 Error Page
 const NotFound = () => {
   return (
     <div className="container my-4">
-      <h2>Página não encontrada</h2>
+      <h2>Page not found</h2>
     </div>
   );
 };
@@ -51,7 +51,7 @@ function App() {
           theme="colored"
         />
 
-        <Suspense fallback={<div>Carregando...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/cars/dashboard" element={
               <Suspense fallback={<div>Loading...</div>}>

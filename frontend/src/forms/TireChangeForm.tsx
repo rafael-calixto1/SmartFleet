@@ -37,12 +37,12 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
         if (response.data && Array.isArray(response.data.cars)) {
           setCars(response.data.cars);
         } else {
-          console.error("A resposta não contém um array de carros:", response.data);
-          toast.error("Erro ao carregar a lista de carros");
+          console.error("Response does not contain an array of cars:", response.data);
+          toast.error("Error loading car list");
         }
       } catch (error) {
-        console.error("Erro ao carregar os carros:", error);
-        toast.error("Erro ao carregar a lista de carros");
+        console.error("Error loading cars:", error);
+        toast.error("Error loading car list");
       }
     };
 
@@ -53,17 +53,17 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
     const newErrors: { [key: string]: string } = {};
 
     if (!tireChangeData.car_id) {
-      newErrors.car_id = 'Selecione um carro';
+      newErrors.car_id = 'Select a car';
     }
 
     if (!tireChangeData.tire_change_date) {
-      newErrors.tire_change_date = 'Selecione a data da troca';
+      newErrors.tire_change_date = 'Select the change date';
     }
 
     if (!tireChangeData.tire_change_kilometers) {
-      newErrors.tire_change_kilometers = 'Digite a quilometragem';
+      newErrors.tire_change_kilometers = 'Enter the mileage';
     } else if (parseInt(tireChangeData.tire_change_kilometers) < 0) {
-      newErrors.tire_change_kilometers = 'A quilometragem não pode ser negativa';
+      newErrors.tire_change_kilometers = 'Mileage cannot be negative';
     }
 
     setErrors(newErrors);
@@ -133,8 +133,8 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
         }
       }
     } catch (error: any) {
-      console.error("Erro ao registrar troca de pneus:", error);
-      toast.error(error.response?.data?.message || "Erro ao registrar troca de pneus");
+      console.error("Error registering tire change:", error);
+      toast.error(error.response?.data?.message || "Error registering tire change");
     } finally {
       setIsSubmitting(false);
     }
@@ -143,7 +143,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
       <div className="mb-3">
-        <label htmlFor="car_id" className="form-label">Carro</label>
+        <label htmlFor="car_id" className="form-label">Car</label>
         <select
           id="car_id"
           name="car_id"
@@ -152,7 +152,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
           onChange={handleChange}
           disabled={isSubmitting}
         >
-          <option value="">Selecione um carro</option>
+          <option value="">Select a car</option>
           {cars.map((car) => (
             <option key={car.id} value={car.id}>
               {car.model} - {car.license_plate}
@@ -167,7 +167,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
       </div>
 
       <div className="mb-3">
-        <label htmlFor="tire_change_date" className="form-label">Data da Troca</label>
+        <label htmlFor="tire_change_date" className="form-label">Change Date</label>
         <input
           type="date"
           id="tire_change_date"
@@ -185,7 +185,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
       </div>
 
       <div className="mb-3">
-        <label htmlFor="tire_change_kilometers" className="form-label">Quilometragem</label>
+        <label htmlFor="tire_change_kilometers" className="form-label">Mileage</label>
         <input
           type="number"
           id="tire_change_kilometers"
@@ -203,7 +203,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
       </div>
 
       <div className="mb-3">
-        <label htmlFor="observation" className="form-label">Observação</label>
+        <label htmlFor="observation" className="form-label">Observation</label>
         <textarea
           id="observation"
           name="observation"
@@ -223,7 +223,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
             onClick={onClose}
             disabled={isSubmitting}
           >
-            Cancelar
+            Cancel
           </button>
         )}
         <button
@@ -231,7 +231,7 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
           className="btn btn-primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Salvando...' : (initialData ? 'Atualizar' : 'Salvar')}
+          {isSubmitting ? 'Saving...' : (initialData ? 'Update' : 'Save')}
         </button>
       </div>
     </form>
