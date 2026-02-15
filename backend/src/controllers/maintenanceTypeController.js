@@ -29,8 +29,7 @@ exports.getAllMaintenanceTypes = async (req, res) => {
 
         // Get paginated and sorted results
         const [types] = await db.execute(
-            `SELECT * FROM maintenance_types ORDER BY ${sortField} ${sortOrder} LIMIT ? OFFSET ?`,
-            [limit, offset]
+            `SELECT * FROM maintenance_types ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
         );
 
         res.json({

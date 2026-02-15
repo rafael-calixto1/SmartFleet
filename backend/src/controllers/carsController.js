@@ -104,10 +104,10 @@ exports.getAllCars = async (req, res) => {
       LEFT JOIN drivers d ON c.driver_id = d.id 
       ${statusCondition}
       ORDER BY ${orderByClause}
-      LIMIT ? OFFSET ?
+      LIMIT ${limit} OFFSET ${offset}
     `;
 
-    const queryParams = [...statusParams, limit, offset];
+    const queryParams = [...statusParams];
     const [cars] = await db.execute(query, queryParams);
 
     res.json({
@@ -120,6 +120,7 @@ exports.getAllCars = async (req, res) => {
     });
   } catch (error) {
     console.error('Error in getAllCars:', error);
+    console.log(error)
     res.status(500).json({ error: 'Internal server error' });
   }
 };

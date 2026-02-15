@@ -27,6 +27,10 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     useEffect(() => {
+        setMaintenanceHistory(initialData);
+    }, [initialData]);
+
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 // Fetch cars

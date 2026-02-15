@@ -1,6 +1,6 @@
 -- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas;
-USE gerenciamento_de_frotas;
+CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas2;
+USE gerenciamento_de_frotas2;
 
 -- Create drivers table
 CREATE TABLE IF NOT EXISTS drivers (
@@ -95,8 +95,8 @@ INSERT INTO maintenance_types (name, recurrency) VALUES
     ('Ar Condicionado', NULL),
     ('Outros', NULL)
 ON DUPLICATE KEY UPDATE name = VALUES(name), recurrency = VALUES(recurrency); 
-CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas;
-USE gerenciamento_de_frotas;
+CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas2;
+USE gerenciamento_de_frotas2;
 
 -- Create drivers table
 CREATE TABLE IF NOT EXISTS drivers (

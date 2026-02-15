@@ -14,12 +14,12 @@ exports.createOilChange = async (req, res) => {
 
   // Verificação dos campos obrigatórios
   if (
-    !car_id ||
-    !oil_change_date ||
-    !oil_change_kilometers ||
-    !liters_quantity ||
-    !price_per_liter ||
-    !total_cost
+    car_id == null ||
+    oil_change_date == null ||
+    oil_change_kilometers == null ||
+    liters_quantity == null ||
+    price_per_liter == null ||
+    total_cost == null
   ) {
     return res.status(400).json({
       message: 'Todos os campos (car_id, oil_change_date, oil_change_kilometers, liters_quantity, price_per_liter, total_cost) são obrigatórios.'
@@ -107,8 +107,7 @@ exports.getOilChangeHistory = async (req, res) => {
        FROM oil_change_history och
        LEFT JOIN cars c ON och.car_id = c.id
        ORDER BY och.${sortField} ${sortOrder} 
-       LIMIT ?, ?`,
-      [offset, limit]
+       LIMIT ${limit} OFFSET ${offset}`
     );
 
     res.status(200).json({
@@ -157,12 +156,12 @@ exports.updateOilChange = async (req, res) => {
 
     // Verificação dos campos obrigatórios
     if (
-      !car_id ||
-      !oil_change_date ||
-      !oil_change_kilometers ||
-      !liters_quantity ||
-      !price_per_liter ||
-      !total_cost
+      car_id == null ||
+      oil_change_date == null ||
+      oil_change_kilometers == null ||
+      liters_quantity == null ||
+      price_per_liter == null ||
+      total_cost == null
     ) {
       return res.status(400).json({
         message: 'Todos os campos (car_id, oil_change_date, oil_change_kilometers, liters_quantity, price_per_liter, total_cost) são obrigatórios.'

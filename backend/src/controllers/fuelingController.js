@@ -7,35 +7,36 @@ const createFuelingEntry = async (req, res) => {
       car_id,
       fuel_date,
       fueling_kilometers,
-      liters_quantity,
-      price_per_liter,
-      total_cost,
-      fuel_type,
-      observation,
-    } = req.body;
-
-    // Verificação dos campos obrigatórios
+          liters_quantity,
+          price_per_liter,
+          total_cost,
+                fuel_type,
+                observation,
+                fuel_amount,
+              } = req.body;    // Verificação dos campos obrigatórios
     if (
       !car_id ||
       !fuel_date ||
-      !fueling_kilometers ||
-      !liters_quantity ||
-      !price_per_liter ||
-      !total_cost ||
-      !fuel_type
+      fueling_kilometers == null ||
+      liters_quantity == null ||
+      price_per_liter == null ||
+      total_cost == null ||
+      !fuel_type ||
+      fuel_amount == null
     ) {
       return res.status(400).json({
-        message: 'Todos os campos (car_id, fuel_date, fueling_kilometers, liters_quantity, price_per_liter, total_cost, fuel_type) são obrigatórios.',
+        message: 'Todos os campos (car_id, fuel_date, fueling_kilometers, liters_quantity, price_per_liter, total_cost, fuel_type, fuel_amount) são obrigatórios.',
       });
     }
 
     // Inserção no banco de dados
     const [result] = await db.execute(
       `INSERT INTO fueling_history 
-       (car_id, fuel_date, fueling_kilometers, liters_quantity, price_per_liter, total_cost, fuel_type, observation) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+       (car_id, fuel_amount, fuel_date, fueling_kilometers, liters_quantity, price_per_liter, total_cost, fuel_type, observation) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         car_id,
+        fuel_amount,
         fuel_date,
         fueling_kilometers,
         liters_quantity,
@@ -88,6 +89,7 @@ const getFuelingHistory = async (req, res) => {
       'price_per_liter': 'fh.price_per_liter',
       'total_cost': 'fh.total_cost',
       'fuel_type': 'fh.fuel_type',
+      'fuel_amount': 'fh.fuel_amount',
       'license_plate': 'c.license_plate'
     };
 
@@ -110,10 +112,10 @@ const getFuelingHistory = async (req, res) => {
       FROM fueling_history fh
       LEFT JOIN cars c ON fh.car_id = c.id
       ORDER BY ${validSortFields[sortField]} ${sortOrder}, fh.id ASC
-      LIMIT ? OFFSET ?
+      LIMIT ${limit} OFFSET ${offset}
     `;
 
-    const [fuelingHistory] = await db.execute(query, [limit, offset]);
+    const [fuelingHistory] = await db.execute(query);
 
     res.status(200).json({
       fuelingHistory,
@@ -123,6 +125,7 @@ const getFuelingHistory = async (req, res) => {
     });
   } catch (err) {
     console.error('Erro ao buscar histórico de abastecimento:', err);
+    console.log(err)
     res.status(500).json({ message: 'Erro interno do servidor' });
   }
 };
@@ -157,22 +160,20 @@ const updateFuelingEntry = async (req, res) => {
     fuel_amount,
     fuel_date,
     fueling_kilometers,
-    liters_quantity,
-    price_per_liter,
-    total_cost,
-    fuel_type,
-      observation,
-  } = req.body;
-
-  // Verificação dos campos obrigatórios
+        liters_quantity,
+        price_per_liter,
+        total_cost,
+        fuel_type,
+        observation,
+      } = req.body;  // Verificação dos campos obrigatórios
   if (
     !car_id ||
-    !fuel_amount ||
+    fuel_amount == null ||
     !fuel_date ||
-    !fueling_kilometers ||
-    !liters_quantity ||
-    !price_per_liter ||
-    !total_cost ||
+    fueling_kilometers == null ||
+    liters_quantity == null ||
+    price_per_liter == null ||
+    total_cost == null ||
     !fuel_type
   ) {
     return res.status(400).json({
@@ -326,10 +327,11 @@ const getMaintenanceByTypeStatistics = async (req, res) => {
     }
 
     const [rows] = await db.execute(
-      `SELECT maintenance_type AS tipo_manutencao, COUNT(*) AS total_manutencoes
-       FROM car_maintenance_history
-       WHERE maintenance_date BETWEEN ? AND ?
-       GROUP BY maintenance_type`,
+      `SELECT mt.name AS tipo_manutencao, COUNT(*) AS total_manutencoes
+       FROM car_maintenance_history cmh
+       JOIN maintenance_types mt ON cmh.maintenance_type_id = mt.id
+       WHERE cmh.maintenance_date BETWEEN ? AND ?
+       GROUP BY mt.name`,
       [startDate, endDate]
     );
 

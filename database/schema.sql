@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas;
+CREATE DATABASE IF NOT EXISTS gerenciamento_de_frotas2;
 
-USE gerenciamento_de_frotas;
+USE gerenciamento_de_frotas2;
 
 CREATE TABLE IF NOT EXISTS drivers (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS cars (
     id INT AUTO_INCREMENT PRIMARY KEY,
     make VARCHAR(255) NOT NULL,
     model VARCHAR(255) NOT NULL,
-    current_kilometers DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    current_kilometers DECIMAL(12, 2) NOT NULL DEFAULT 0,
     next_tire_change INT DEFAULT NULL,
     is_next_tire_change_bigger BOOLEAN NOT NULL DEFAULT false,
     next_oil_change INT DEFAULT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS fueling_history (
     car_id INT NOT NULL,
     fuel_amount DECIMAL(10, 2) NOT NULL,
     fuel_date DATE NOT NULL,
-    fueling_kilometers DECIMAL(10, 2) NOT NULL,
+    fueling_kilometers DECIMAL(12, 2) NOT NULL,
     liters_quantity DECIMAL(10, 2) NOT NULL,  
     price_per_liter DECIMAL(10, 2) NOT NULL,
     total_cost DECIMAL(10, 2) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS tire_change_history (
     id INT AUTO_INCREMENT PRIMARY KEY,
     car_id INT NOT NULL,
     tire_change_date DATE NOT NULL,
-    tire_change_kilometers DECIMAL(10, 2) NOT NULL,
+    tire_change_kilometers DECIMAL(12, 2) NOT NULL,
     observation TEXT,
     FOREIGN KEY (car_id) REFERENCES cars(id)
 );
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS maintenance_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     recurrency INT NOT NULL,
-    recurrency_date INT NOT NULL
+    recurrency_date INT NOT NULL DEFAULT 0
 );
 
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS car_maintenance_history (
     car_id INT NOT NULL,
     maintenance_type_id INT NOT NULL,
     maintenance_date DATE NOT NULL,
-    maintenance_kilometers DECIMAL(10, 2) NOT NULL,
+    maintenance_kilometers DECIMAL(12, 2) NOT NULL,
     observation TEXT,
     recurrency INT DEFAULT 0,
     FOREIGN KEY (car_id) REFERENCES cars(id),
@@ -72,19 +72,13 @@ CREATE TABLE IF NOT EXISTS oil_change_history (
     liters_quantity DECIMAL(10, 2) NOT NULL,  
     price_per_liter DECIMAL(10, 2) NOT NULL,
     total_cost DECIMAL(10, 2) NOT NULL,
-    oil_change_kilometers DECIMAL(10, 2) NOT NULL,
+    oil_change_kilometers DECIMAL(12, 2) NOT NULL,
     observation TEXT,
     FOREIGN KEY (car_id) REFERENCES cars(id)
 );
 
 
-ALTER TABLE drivers ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE cars ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE fueling_history ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE tire_change_history ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE maintenance_types ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE car_maintenance_history ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
-ALTER TABLE oil_change_history ADD COLUMN IF NOT EXISTS status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
+
 
 
 -- Inserindo dados na tabela drivers

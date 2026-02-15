@@ -106,8 +106,7 @@ exports.getTireChanges = async (req, res) => {
     query += ` ORDER BY tch.${sortField} ${sortOrder}`;
 
     // Adicionar paginação
-    query += ' LIMIT ?, ?';
-    const paginationParams = [...queryParams, offset, limit];
+    query += ` LIMIT ${limit} OFFSET ${offset}`;
 
     // Executar consulta de contagem
     const [countResult] = await db.execute(countQuery, queryParams);
@@ -115,7 +114,7 @@ exports.getTireChanges = async (req, res) => {
     const totalPages = Math.ceil(total / limit);
 
     // Executar consulta principal
-    const [results] = await db.execute(query, paginationParams);
+    const [results] = await db.execute(query, queryParams);
 
     res.status(200).json({
       tireChangeHistory: results,
@@ -130,80 +129,79 @@ exports.getTireChanges = async (req, res) => {
 };
 
 // GET ALL TIRE CHANGES FOR A SPECIFIC CAR with Pagination, Filters, and Sorting
-exports.getTireChangesByCar = (req, res) => {
-  const carId = req.params.carId;
-  const page = parseInt(req.query.page) || 1;
-  let limit = parseInt(req.query.limit) || 10;
+exports.getTireChangesByCar = async (req, res) => {
+  try {
+    const carId = req.params.carId;
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
 
-  const validLimits = [10, 20, 50, 100, 200, 500];
-  if (!validLimits.includes(limit)) {
-    limit = 10;
-  }
-
-  const offset = (page - 1) * limit;
-
-  // Filtros
-  const startDate = req.query.start_date || null;
-  const endDate = req.query.end_date || null;
-  const minKilometers = req.query.min_kilometers || null;
-  const maxKilometers = req.query.max_kilometers || null;
-
-  // Ordenação
-  const sortField = req.query.sort_field || 'id';
-  const sortOrder = req.query.sort_order === 'desc' ? 'desc' : 'asc';
-
-  // Montar a consulta com base nos filtros
-  let query = 'SELECT * FROM tire_change_history WHERE car_id = ?';
-  const queryParams = [carId];
-
-  if (startDate) {
-    query += ' AND tire_change_date >= ?';
-    queryParams.push(startDate);
-  }
-  if (endDate) {
-    query += ' AND tire_change_date <= ?';
-    queryParams.push(endDate);
-  }
-  if (minKilometers) {
-    query += ' AND tire_change_kilometers >= ?';
-    queryParams.push(minKilometers);
-  }
-  if (maxKilometers) {
-    query += ' AND tire_change_kilometers <= ?';
-    queryParams.push(maxKilometers);
-  }
-
-  // Ordenação
-  query += ` ORDER BY ${sortField} ${sortOrder}`;
-
-  // Contagem total para paginação
-  db.query('SELECT COUNT(*) AS total FROM tire_change_history WHERE car_id = ?' + (startDate ? ' AND tire_change_date >= ?' : '') + (endDate ? ' AND tire_change_date <= ?' : '') + (minKilometers ? ' AND tire_change_kilometers >= ?' : '') + (maxKilometers ? ' AND tire_change_kilometers <= ?' : ''), queryParams, (err, countResult) => {
-    if (err) {
-      console.error('Error counting tire change entries: ', err);
-      return res.status(500).send('Internal Server Error');
+    const validLimits = [10, 20, 50, 100, 200, 500];
+    if (!validLimits.includes(limit)) {
+      limit = 10;
     }
+
+    const offset = (page - 1) * limit;
+
+    // Filtros
+    const startDate = req.query.start_date || null;
+    const endDate = req.query.end_date || null;
+    const minKilometers = req.query.min_kilometers || null;
+    const maxKilometers = req.query.max_kilometers || null;
+
+    // Ordenação
+    const sortField = req.query.sort_field || 'id';
+    const sortOrder = req.query.sort_order === 'desc' ? 'desc' : 'asc';
+
+    // Montar a consulta com base nos filtros
+    let query = 'SELECT * FROM tire_change_history WHERE car_id = ?';
+    let countQuery = 'SELECT COUNT(*) AS total FROM tire_change_history WHERE car_id = ?';
+    const queryParams = [carId];
+
+    if (startDate) {
+      query += ' AND tire_change_date >= ?';
+      countQuery += ' AND tire_change_date >= ?';
+      queryParams.push(startDate);
+    }
+    if (endDate) {
+      query += ' AND tire_change_date <= ?';
+      countQuery += ' AND tire_change_date <= ?';
+      queryParams.push(endDate);
+    }
+    if (minKilometers) {
+      query += ' AND tire_change_kilometers >= ?';
+      countQuery += ' AND tire_change_kilometers >= ?';
+      queryParams.push(minKilometers);
+    }
+    if (maxKilometers) {
+      query += ' AND tire_change_kilometers <= ?';
+      countQuery += ' AND tire_change_kilometers <= ?';
+      queryParams.push(maxKilometers);
+    }
+
+    // Ordenação
+    query += ` ORDER BY ${sortField} ${sortOrder}`;
+
+    // Contagem total para paginação
+    const [countResult] = await db.execute(countQuery, queryParams);
 
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
     // Consulta para pegar os resultados paginados
-    query += ' LIMIT ?, ?';
-    queryParams.push(offset, limit);
+    query += ` LIMIT ${limit} OFFSET ${offset}`;
 
-    db.query(query, queryParams, (err, result) => {
-      if (err) {
-        console.error('Error fetching tire change history for car: ', err);
-        return res.status(500).send('Internal Server Error');
-      }
+    const [result] = await db.execute(query, queryParams);
 
-      res.status(200).json({
-        tireChangeHistory: result,
-        totalPages: totalPages,
-        currentPage: page,
-        total: total,
-      });
+    res.status(200).json({
+      tireChangeHistory: result,
+      totalPages: totalPages,
+      currentPage: page,
+      total: total,
     });
-  });
+  } catch (err) {
+    console.error('Error fetching tire change history for car: ', err);
+    return res.status(500).send('Internal Server Error');
+  }
 };
 
 // GET A SPECIFIC TIRE CHANGE ENTRY BY ID

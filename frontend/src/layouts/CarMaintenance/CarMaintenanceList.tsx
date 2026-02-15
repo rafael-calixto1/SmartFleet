@@ -170,36 +170,38 @@ const CarMaintenanceList = () => {
       </div>
 
       {isModalOpen && (
-        <div className="modal show d-block" tabIndex={-1}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">
-                  {editingMaintenance ? 'Edit Maintenance' : 'Add Maintenance'}
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    setEditingMaintenance(null);
-                  }}
-                />
-              </div>
-              <div className="modal-body">
-                <CarMaintenanceForm
-                  onSuccess={handleMaintenanceSuccess}
-                  initialData={editingMaintenance}
-                  onClose={() => {
-                    setIsModalOpen(false);
-                    setEditingMaintenance(null);
-                  }}
-                />
+        <>
+          <div className="modal show d-block" tabIndex={-1}>
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    {editingMaintenance ? 'Edit Maintenance' : 'Add Maintenance'}
+                  </h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setEditingMaintenance(null);
+                    }}
+                  />
+                </div>
+                <div className="modal-body">
+                  <CarMaintenanceForm
+                    onSuccess={handleMaintenanceSuccess}
+                    initialData={editingMaintenance}
+                    onClose={() => {
+                      setIsModalOpen(false);
+                      setEditingMaintenance(null);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
           <div className="modal-backdrop show"></div>
-        </div>
+        </>
       )}
 
       <ConfirmationModal

@@ -98,8 +98,8 @@ const TireChangeForm: React.FC<TireChangeFormProps> = ({ onSuccess, onClose, ini
       };
 
       const url = initialData?.id 
-        ? `${process.env.REACT_APP_BACKEND_URL}/tire-change/${initialData.id}`
-        : `${process.env.REACT_APP_BACKEND_URL}/tire-change`;
+        ? `${process.env.REACT_APP_BACKEND_URL}/tire-changes/entry/${initialData.id}`
+        : `${process.env.REACT_APP_BACKEND_URL}/tire-changes`;
 
       const response = await axios({
         method: initialData?.id ? 'PUT' : 'POST',

@@ -45,10 +45,10 @@ exports.getAllMaintenanceHistory = async (req, res) => {
             JOIN maintenance_types mt ON cmh.maintenance_type_id = mt.id
             JOIN cars c ON cmh.car_id = c.id
             ORDER BY ${sortBy} ${sortOrder}, cmh.id ASC
-            LIMIT ? OFFSET ?
+            LIMIT ${limit} OFFSET ${offset}
         `;
 
-        const [history] = await db.execute(query, [limit, offset]);
+        const [history] = await db.execute(query);
 
         res.json({
             maintenanceHistory: history,
@@ -98,8 +98,8 @@ exports.getMaintenanceHistoryByCar = async (req, res) => {
             JOIN cars c ON cmh.car_id = c.id
             WHERE cmh.car_id = ?
             ORDER BY ${sortField} ${sortOrder}
-            LIMIT ? OFFSET ?
-        `, [req.params.carId, limit, offset]);
+            LIMIT ${limit} OFFSET ${offset}
+        `, [req.params.carId]);
 
         res.json({
             maintenanceHistory: history,
@@ -145,9 +145,9 @@ exports.createMaintenanceHistory = async (req, res) => {
         // Insert maintenance history with maintenance type name
         const [result] = await connection.execute(
             `INSERT INTO car_maintenance_history 
-            (car_id, maintenance_type_id, maintenance_type, maintenance_date, maintenance_kilometers, observation, recurrency)
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [car_id, maintenance_type_id, maintenanceType[0].name, maintenance_date, maintenance_kilometers, observation, recurrency]
+            (car_id, maintenance_type_id, maintenance_date, maintenance_kilometers, observation, recurrency)
+            VALUES (?, ?, ?, ?, ?, ?)`,
+            [car_id, maintenance_type_id, maintenance_date, maintenance_kilometers, observation, recurrency]
         );
 
         if (maintenanceType[0].recurrency) {
@@ -170,7 +170,6 @@ exports.createMaintenanceHistory = async (req, res) => {
             id: result.insertId,
             car_id,
             maintenance_type_id,
-            maintenance_type: maintenanceType[0].name,
             maintenance_date,
             maintenance_kilometers,
             observation,
@@ -222,10 +221,10 @@ exports.updateMaintenanceHistory = async (req, res) => {
 
         const [result] = await connection.execute(
             `UPDATE car_maintenance_history 
-            SET car_id = ?, maintenance_type_id = ?, maintenance_type = ?, maintenance_date = ?, 
+            SET car_id = ?, maintenance_type_id = ?, maintenance_date = ?, 
                 maintenance_kilometers = ?, observation = ?, recurrency = ?
             WHERE id = ?`,
-            [car_id, maintenance_type_id, maintenanceType[0].name, maintenance_date, maintenance_kilometers, 
+            [car_id, maintenance_type_id, maintenance_date, maintenance_kilometers, 
              observation, recurrency, req.params.id]
         );
 
@@ -240,7 +239,6 @@ exports.updateMaintenanceHistory = async (req, res) => {
             id: req.params.id,
             car_id,
             maintenance_type_id,
-            maintenance_type: maintenanceType[0].name,
             maintenance_date,
             maintenance_kilometers,
             observation,

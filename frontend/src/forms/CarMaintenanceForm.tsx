@@ -161,15 +161,13 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       if (response.status === 200 || response.status === 201) {
         toast.success(initialData?.id ? 'Maintenance updated successfully!' : 'Maintenance registered successfully!');
         
-        setTimeout(() => {
-          if (onSuccess) {
-            onSuccess();
-          }
-          
-          if (onClose) {
-            onClose();
-          }
-        }, 500);
+        if (onSuccess) {
+          onSuccess();
+        }
+        
+        if (onClose) {
+          onClose();
+        }
       }
     } catch (error: any) {
       console.error("Error registering maintenance:", error);

@@ -137,6 +137,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
           total_cost: fuelingData.total_cost,
           fuel_type: fuelingData.fuel_type,
           observation: fuelingData.observation,
+          fuel_amount: fuelingData.liters_quantity, // Add fuel_amount here
         }
       });
 

@@ -48,8 +48,7 @@ exports.getDrivers = async (req, res) => {
     const totalPages = Math.ceil(total / limit);
 
     const [drivers] = await db.execute(
-      `SELECT * FROM drivers ORDER BY ${sortField} ${sortOrder} LIMIT ?, ?`,
-      [offset, limit]
+      `SELECT * FROM drivers ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
     );
 
     res.status(200).json({
