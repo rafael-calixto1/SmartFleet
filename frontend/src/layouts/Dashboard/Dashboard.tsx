@@ -88,7 +88,7 @@ const Dashboard = () => {
   const [fuelByTypeData, setFuelByTypeData] = useState<BarChartData>({
     labels: [],
     datasets: [{
-      label: 'Total Liters',
+      label: 'Total de Litros',
       data: [],
       backgroundColor: '#36A2EB',
       borderColor: '#2993DC',
@@ -99,7 +99,7 @@ const Dashboard = () => {
   const [fuelCostByTypeData, setFuelCostByTypeData] = useState<BarChartData>({
     labels: [],
     datasets: [{
-      label: 'Total Cost',
+      label: 'Custo Total',
       data: [],
       backgroundColor: '#FF6384',
       borderColor: '#FF4F74',
@@ -110,7 +110,7 @@ const Dashboard = () => {
   const [maintenanceByTypeData, setMaintenanceByTypeData] = useState<BarChartData>({
     labels: [],
     datasets: [{
-      label: 'Total Maintenances',
+      label: 'Total de Manutenções',
       data: [],
       backgroundColor: '#FFCE56',
       borderColor: '#FFB420',
@@ -122,7 +122,7 @@ const Dashboard = () => {
   const [fuelingByDateData, setFuelingByDateData] = useState<BarChartData>({
     labels: [],
     datasets: [{
-      label: 'Total Fuelings',
+      label: 'Total de Abastecimentos',
       data: [],
       backgroundColor: '#4BC0C0',
       borderColor: '#3AA7A7',
@@ -178,7 +178,7 @@ const Dashboard = () => {
 
         if (!costResponse.ok || !fuelByTypeResponse.ok || !fuelCostByTypeResponse.ok || 
             !maintenanceByTypeResponse.ok || !fuelingByDateResponse.ok) {
-          throw new Error('Failed to fetch data');
+          throw new Error('Falha ao buscar dados');
         }
 
         const costData: FuelingDataItem[] = await costResponse.json();
@@ -233,7 +233,7 @@ const Dashboard = () => {
         const barChartData: BarChartData = {
           labels: fuelByTypeData.map(item => item.tipo_combustivel),
           datasets: [{
-            label: 'Total Liters',
+            label: 'Total de Litros',
             data: fuelByTypeData.map(item => Number(item.total_litros) || 0),
             backgroundColor: '#36A2EB',
             borderColor: '#2993DC',
@@ -245,7 +245,7 @@ const Dashboard = () => {
         const costBarChartData: BarChartData = {
           labels: fuelCostByTypeData.map(item => item.tipo_combustivel),
           datasets: [{
-            label: 'Total Cost',
+            label: 'Custo Total',
             data: fuelCostByTypeData.map(item => Number(item.custo_total) || 0),
             backgroundColor: '#FF6384',
             borderColor: '#FF4F74',
@@ -257,7 +257,7 @@ const Dashboard = () => {
         const maintenanceChartData: BarChartData = {
           labels: maintenanceByTypeData.map(item => item.tipo_manutencao),
           datasets: [{
-            label: 'Total Maintenances',
+            label: 'Total de Manutenções',
             data: maintenanceByTypeData.map(item => Number(item.total_manutencoes) || 0),
             backgroundColor: '#FFCE56',
             borderColor: '#FFB420',
@@ -270,9 +270,9 @@ const Dashboard = () => {
           labels: fuelingByDateData.map(item => {
             switch (timeGrouping) {
               case 'day':
-                return format(new Date(item.data_inicio), 'MM/dd/yyyy');
+                return format(new Date(item.data_inicio), 'dd/MM/yyyy');
               case 'week':
-                return `Week ${item.data_inicio.split('-')[1]}/${item.data_inicio.split('-')[0]}`;
+                return `Semana ${item.data_inicio.split('-')[1]}/${item.data_inicio.split('-')[0]}`;
               case 'month':
                 return format(new Date(item.data_inicio + '-01'), 'MM/yyyy');
               case 'semester':
@@ -285,7 +285,7 @@ const Dashboard = () => {
             }
           }),
           datasets: [{
-            label: 'Total Fuelings',
+            label: 'Total de Abastecimentos',
             data: fuelingByDateData.map(item => Number(item.total_abastecimentos) || 0),
             backgroundColor: '#4BC0C0',
             borderColor: '#3AA7A7',
@@ -299,7 +299,7 @@ const Dashboard = () => {
         setMaintenanceByTypeData(maintenanceChartData);
         setFuelingByDateData(fuelingDateChartData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : 'Ocorreu um erro');
       } finally {
         setIsLoading(false);
       }
@@ -325,7 +325,7 @@ const Dashboard = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -344,14 +344,14 @@ const Dashboard = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Fuel Cost Dashboard</h2>
+      <h2 className="mb-4">Painel de Custos de Combustível</h2>
       
       <div className="card mb-4">
         <div className="card-body">
           <div className="row mb-3">
             <div className="col-md-6">
               <div className="form-group">
-                <label htmlFor="startDate" className="form-label">Start Date:</label>
+                <label htmlFor="startDate" className="form-label">Data de Início:</label>
                 <input
                   type="date"
                   className="form-control"
@@ -364,7 +364,7 @@ const Dashboard = () => {
             </div>
             <div className="col-md-6">
               <div className="form-group">
-                <label htmlFor="endDate" className="form-label">End Date:</label>
+                <label htmlFor="endDate" className="form-label">Data de Término:</label>
                 <input
                   type="date"
                   className="form-control"
@@ -382,16 +382,16 @@ const Dashboard = () => {
             <div className="col-md-6">
               <div className="card bg-light">
                 <div className="card-body">
-                  <h5 className="card-title">Total Fuel Cost</h5>
-                  <h3 className="text-primary">U$ {totalFuelCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
+                  <h5 className="card-title">Custo Total de Combustível</h5>
+                  <h3 className="text-primary">R$ {totalFuelCost.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h3>
                 </div>
               </div>
             </div>
             <div className="col-md-6">
               <div className="card bg-light">
                 <div className="card-body">
-                  <h5 className="card-title">Total Liters Fueled</h5>
-                  <h3 className="text-success">{totalFuelLiters.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} L</h3>
+                  <h5 className="card-title">Total de Litros Abastecidos</h5>
+                  <h3 className="text-success">{totalFuelLiters.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} L</h3>
                 </div>
               </div>
             </div>
@@ -417,12 +417,12 @@ const Dashboard = () => {
                         try {
                           const value = Number(context.raw);
                           if (!isNaN(value)) {
-                            return `U$ ${value.toFixed(2)}`;
+                            return `R$ ${value.toFixed(2)}`;
                           }
-                          return 'Invalid value';
+                          return 'Valor inválido';
                         } catch (err) {
                           console.error('Error formatting tooltip value:', err);
-                          return 'Error formatting value';
+                          return 'Erro ao formatar valor';
                         }
                       }
                     }
@@ -438,7 +438,7 @@ const Dashboard = () => {
         <div className="col-md-6">
           <div className="card mb-4">
             <div className="card-body">
-              <h5 className="card-title">Total Fuel Fueled by Type</h5>
+              <h5 className="card-title">Total de Combustível Abastecido por Tipo</h5>
               <div style={{ height: '300px' }}>
                 <Bar
                   data={fuelByTypeData}
@@ -457,10 +457,10 @@ const Dashboard = () => {
                               if (!isNaN(value)) {
                                 return `${value.toFixed(2)}L`;
                               }
-                              return 'Invalid value';
+                              return 'Valor inválido';
                             } catch (err) {
                               console.error('Error formatting tooltip value:', err);
-                              return 'Error formatting value';
+                              return 'Erro ao formatar valor';
                             }
                           }
                         }
@@ -471,7 +471,7 @@ const Dashboard = () => {
                         beginAtZero: true,
                         title: {
                           display: true,
-                          text: 'Liters'
+                          text: 'Litros'
                         }
                       }
                     }
@@ -485,7 +485,7 @@ const Dashboard = () => {
         <div className="col-md-6">
           <div className="card mb-4">
             <div className="card-body">
-              <h5 className="card-title">Total Fuel Cost by Type</h5>
+              <h5 className="card-title">Custo Total de Combustível por Tipo</h5>
               <div style={{ height: '300px' }}>
                 <Bar
                   data={fuelCostByTypeData}
@@ -502,12 +502,12 @@ const Dashboard = () => {
                             try {
                               const value = Number(context.raw);
                               if (!isNaN(value)) {
-                                return `U$ ${value.toFixed(2)}`;
+                                return `R$ ${value.toFixed(2)}`;
                               }
-                              return 'Invalid value';
+                              return 'Valor inválido';
                             } catch (err) {
                               console.error('Error formatting tooltip value:', err);
-                              return 'Error formatting value';
+                              return 'Erro ao formatar valor';
                             }
                           }
                         }
@@ -518,7 +518,7 @@ const Dashboard = () => {
                         beginAtZero: true,
                         title: {
                           display: true,
-                          text: 'Cost (U$)'
+                          text: 'Custo (R$)'
                         }
                       }
                     }
@@ -534,7 +534,7 @@ const Dashboard = () => {
         <div className="col-12">
           <div className="card mb-4">
             <div className="card-body">
-              <h5 className="card-title">Total Maintenances by Type</h5>
+              <h5 className="card-title">Total de Manutenções por Tipo</h5>
               <div style={{ height: '300px' }}>
                 <Bar
                   data={maintenanceByTypeData}
@@ -551,12 +551,12 @@ const Dashboard = () => {
                             try {
                               const value = Number(context.raw);
                               if (!isNaN(value)) {
-                                return `${value} maintenance${value !== 1 ? 's' : ''}`;
+                                return `${value} manutenç${value !== 1 ? 'ões' : 'ão'}`;
                               }
-                              return 'Invalid value';
+                              return 'Valor inválido';
                             } catch (err) {
                               console.error('Error formatting tooltip value:', err);
-                              return 'Error formatting value';
+                              return 'Erro ao formatar valor';
                             }
                           }
                         }
@@ -567,7 +567,7 @@ const Dashboard = () => {
                         beginAtZero: true,
                         title: {
                           display: true,
-                          text: 'Quantity'
+                          text: 'Quantidade'
                         }
                       }
                     }
@@ -584,18 +584,18 @@ const Dashboard = () => {
           <div className="card mb-4">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5 className="card-title mb-0">Total Fuelings by Date</h5>
+                <h5 className="card-title mb-0">Total de Abastecimentos por Data</h5>
                 <select
                   className="form-select"
                   style={{ width: 'auto' }}
                   value={timeGrouping}
                   onChange={handleTimeGroupingChange}
                 >
-                  <option value="day">By Day</option>
-                  <option value="week">By Week</option>
-                  <option value="month">By Month</option>
-                  <option value="semester">By Semester</option>
-                  <option value="year">By Year</option>
+                  <option value="day">Por Dia</option>
+                  <option value="week">Por Semana</option>
+                  <option value="month">Por Mês</option>
+                  <option value="semester">Por Semestre</option>
+                  <option value="year">Por Ano</option>
                 </select>
               </div>
               <div style={{ height: '300px' }}>
@@ -614,12 +614,12 @@ const Dashboard = () => {
                             try {
                               const value = Number(context.raw);
                               if (!isNaN(value)) {
-                                return `${value} fueling${value !== 1 ? 's' : ''}`;
+                                return `${value} abastecimento${value !== 1 ? 's' : ''}`;
                               }
-                              return 'Invalid value';
+                              return 'Valor inválido';
                             } catch (err) {
                               console.error('Error formatting tooltip value:', err);
-                              return 'Error formatting value';
+                              return 'Erro ao formatar valor';
                             }
                           }
                         }
@@ -630,7 +630,7 @@ const Dashboard = () => {
                         beginAtZero: true,
                         title: {
                           display: true,
-                          text: 'Quantity'
+                          text: 'Quantidade'
                         }
                       },
                       x: {

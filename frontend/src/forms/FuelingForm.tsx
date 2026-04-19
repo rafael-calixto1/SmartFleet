@@ -47,11 +47,11 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
           setCars(carsWithPlates);
         } else {
           console.error("Response does not contain an array of cars:", response.data);
-          toast.error("Error loading car list");
+          toast.error("Erro ao carregar lista de carros");
         }
       } catch (error) {
         console.error("Error loading cars:", error);
-        toast.error("Error loading car list");
+        toast.error("Erro ao carregar lista de carros");
       }
     };
 
@@ -109,7 +109,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
       // Check if the new kilometers is less than or equal to current
       if (fuelingData.fueling_kilometers <= currentKilometers) {
         toast.warn(
-          `The informed mileage (${fuelingData.fueling_kilometers} km) is less than or equal to the current mileage (${currentKilometers} km). Please check the informed value.`,
+          `A quilometragem informada (${fuelingData.fueling_kilometers} km) é menor ou igual à quilometragem atual (${currentKilometers} km). Por favor, verifique o valor informado.`,
           {
             position: "top-center",
             autoClose: 5000,
@@ -147,7 +147,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         { current_kilometers: fuelingData.fueling_kilometers }
       );
 
-      toast.success("Fueling registered and mileage updated successfully!", {
+      toast.success("Abastecimento registrado e quilometragem atualizada com sucesso!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -180,7 +180,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
       }
     } catch (error) {
       console.error("Error registering fueling:", error);
-      toast.error("Error registering fueling. Please try again.", {
+      toast.error("Erro ao registrar abastecimento. Por favor, tente novamente.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -197,10 +197,10 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
 
   return (
     <div className="container my-5">
-      <h2 className="text-center mb-4">Add New Fueling</h2>
+      <h2 className="text-center mb-4">{initialData?.id ? 'Editar Abastecimento' : 'Adicionar Novo Abastecimento'}</h2>
       <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
         <div className="mb-3">
-          <label className="form-label">Car:</label>
+          <label className="form-label">Carro:</label>
           <select
             name="car_id"
             value={fuelingData.car_id}
@@ -209,7 +209,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
             className="form-control"
             disabled={isSubmitting}
           >
-            <option value="">Select a car</option>
+            <option value="">Selecione um carro</option>
             {cars.length > 0 ? (
               cars.map((car) => (
                 <option key={car.id} value={car.id}>
@@ -218,14 +218,14 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
               ))
             ) : (
               <option value="" disabled>
-                No cars available
+                Nenhum carro disponível
               </option>
             )}
           </select>
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Fueling Date:</label>
+          <label className="form-label">Data do Abastecimento:</label>
           <input
             type="date"
             name="fuel_date"
@@ -238,7 +238,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Fueling Kilometers:</label>
+          <label className="form-label">Quilometragem no Abastecimento:</label>
           <input
             type="number"
             name="fueling_kilometers"
@@ -251,7 +251,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Liters Quantity:</label>
+          <label className="form-label">Quantidade em Litros:</label>
           <input
             type="number"
             name="liters_quantity"
@@ -266,7 +266,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Price per Liter:</label>
+          <label className="form-label">Preço por Litro:</label>
           <input
             type="number"
             name="price_per_liter"
@@ -279,7 +279,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Total Cost:</label>
+          <label className="form-label">Custo Total:</label>
           <input
             type="number"
             name="total_cost"
@@ -291,7 +291,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Fuel Type:</label>
+          <label className="form-label">Tipo de Combustível:</label>
           <select
             name="fuel_type"
             value={fuelingData.fuel_type}
@@ -300,16 +300,16 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
             className="form-control"
             disabled={isSubmitting}
           >
-            <option value="">Select fuel type</option>
-            <option value="Gasoline">Gasoline</option>
-            <option value="Ethanol">Ethanol</option>
+            <option value="">Selecione o tipo de combustível</option>
+            <option value="Gasoline">Gasolina</option>
+            <option value="Ethanol">Etanol</option>
             <option value="Diesel">Diesel</option>
-            <option value="CNG">CNG</option>
+            <option value="CNG">GNV</option>
           </select>
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Observation:</label>
+          <label className="form-label">Observação:</label>
           <textarea
             name="observation"
             value={fuelingData.observation}
@@ -321,7 +321,7 @@ const FuelingForm: React.FC<FuelingFormProps> = ({ onSuccess, initialData, cars:
 
         <div className="d-grid gap-2">
           <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : (initialData?.id ? 'Update Fueling' : 'Add Fueling')}
+            {isSubmitting ? 'Processando...' : (initialData?.id ? 'Atualizar Abastecimento' : 'Adicionar Abastecimento')}
           </button>
         </div>
       </form>

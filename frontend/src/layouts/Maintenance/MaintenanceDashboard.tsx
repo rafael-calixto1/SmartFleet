@@ -52,7 +52,7 @@ const MaintenanceDashboard: React.FC = () => {
         );
         
         if (!maintenanceResponse.ok) {
-          throw new Error('Failed to fetch maintenance statistics');
+          throw new Error('Falha ao buscar estatísticas de manutenção');
         }
 
         const maintenanceData = await maintenanceResponse.json();
@@ -64,7 +64,7 @@ const MaintenanceDashboard: React.FC = () => {
         );
         
         if (!oilChangeCostResponse.ok) {
-          throw new Error('Failed to fetch oil change costs by car');
+          throw new Error('Falha ao buscar custos de troca de óleo por carro');
         }
 
         const oilChangeCostData = await oilChangeCostResponse.json();
@@ -72,7 +72,7 @@ const MaintenanceDashboard: React.FC = () => {
         
         setError(null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        setError(err instanceof Error ? err.message : 'Ocorreu um erro');
       } finally {
         setIsLoading(false);
       }
@@ -85,7 +85,7 @@ const MaintenanceDashboard: React.FC = () => {
     labels: maintenanceData.map(item => item.maintenance_type),
     datasets: [
       {
-        label: 'Total Maintenances',
+        label: 'Total de Manutenções',
         data: maintenanceData.map(item => item.total_maintenance),
         backgroundColor: 'rgba(75, 192, 192, 0.5)',
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -102,7 +102,7 @@ const MaintenanceDashboard: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Total Maintenances by Type',
+        text: 'Total de Manutenções por Tipo',
       },
     },
     scales: {
@@ -119,7 +119,7 @@ const MaintenanceDashboard: React.FC = () => {
     labels: oilChangeCostData.map(item => item.car_model),
     datasets: [
       {
-        label: 'Total Cost (U$)',
+        label: 'Custo Total (R$)',
         data: oilChangeCostData.map(item => item.total_cost),
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
         borderColor: 'rgba(53, 162, 235, 1)',
@@ -136,7 +136,7 @@ const MaintenanceDashboard: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Total Oil Change Cost by Car',
+        text: 'Custo Total de Troca de Óleo por Carro',
       },
     },
     scales: {
@@ -144,7 +144,7 @@ const MaintenanceDashboard: React.FC = () => {
         beginAtZero: true,
         title: {
           display: true,
-          text: 'Cost (U$)'
+          text: 'Custo (R$)'
         }
       },
     },
@@ -155,7 +155,7 @@ const MaintenanceDashboard: React.FC = () => {
       <div className="container mt-4" style={{ marginLeft: '60px' }}>
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -174,12 +174,12 @@ const MaintenanceDashboard: React.FC = () => {
 
   return (
     <div className="container-fluid p-4" style={{ marginLeft: '60px' }}>
-      <h1 className="mb-4">Maintenance Dashboard</h1>
+      <h1 className="mb-4">Painel de Manutenção</h1>
       
       <Row className="mb-4">
         <Col md={6}>
           <Form.Group>
-            <Form.Label>Start Date</Form.Label>
+            <Form.Label>Data de Início</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.startDate}
@@ -189,7 +189,7 @@ const MaintenanceDashboard: React.FC = () => {
         </Col>
         <Col md={6}>
           <Form.Group>
-            <Form.Label>End Date</Form.Label>
+            <Form.Label>Data de Término</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.endDate}
@@ -202,7 +202,7 @@ const MaintenanceDashboard: React.FC = () => {
       <Row className="mb-4">
         <Col>
           <Card>
-            <Card.Header>Total Maintenances by Type</Card.Header>
+            <Card.Header>Total de Manutenções por Tipo</Card.Header>
             <Card.Body>
               <Bar data={maintenanceChartData} options={maintenanceChartOptions} />
             </Card.Body>
@@ -213,7 +213,7 @@ const MaintenanceDashboard: React.FC = () => {
       <Row className="mb-4">
         <Col>
           <Card>
-            <Card.Header>Total Oil Change Cost by Car</Card.Header>
+            <Card.Header>Custo Total de Troca de Óleo por Carro</Card.Header>
             <Card.Body>
               <Bar data={oilChangeCostChartData} options={oilChangeCostChartOptions} />
             </Card.Body>

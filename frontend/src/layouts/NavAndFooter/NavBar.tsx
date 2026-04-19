@@ -129,7 +129,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Vehicles"
+                  primary="Veículos"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -155,7 +155,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Car List"
+                    primary="Lista de Carros"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -176,7 +176,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Add Car"
+                    primary="Adicionar Carro"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -200,7 +200,7 @@ export const Navbar = () => {
                 />
                 {drawerOpen && (
                   <ListItemText
-                    primary="Dashboard"
+                    primary="Painel"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -237,7 +237,7 @@ export const Navbar = () => {
               />
               {drawerOpen && (
                 <ListItemText
-                  primary="Fueling"
+                  primary="Abastecimento"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
               )}
@@ -266,7 +266,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Maintenance"
+                  primary="Manutenção"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -292,7 +292,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Maintenance History"
+                    primary="Histórico de Manutenção"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -311,7 +311,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="Maintenance Types"
+                    primary="Tipos de Manutenção"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -335,7 +335,7 @@ export const Navbar = () => {
                 />
                 {drawerOpen && (
                   <ListItemText
-                    primary="Dashboard"
+                    primary="Painel"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -344,7 +344,7 @@ export const Navbar = () => {
           </Collapse>
 
           {[
-            { to: "/drivers", icon: faUser, label: "Drivers" },
+            { to: "/drivers", icon: faUser, label: "Motoristas" },
           ].map((item) => (
             <ListItem
               key={item.to}
@@ -401,7 +401,7 @@ export const Navbar = () => {
             {drawerOpen && (
               <>
                 <ListItemText
-                  primary="Oil Changes"
+                  primary="Trocas de Óleo"
                   sx={{ color: "white", fontWeight: 500, fontSize: "0.875rem" }}
                 />
                 <FontAwesomeIcon
@@ -427,7 +427,7 @@ export const Navbar = () => {
               >
                 {drawerOpen && (
                   <ListItemText
-                    primary="History"
+                    primary="Histórico"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -451,7 +451,7 @@ export const Navbar = () => {
                 />
                 {drawerOpen && (
                   <ListItemText
-                    primary="Cost Dashboard"
+                    primary="Painel de Custos"
                     sx={{ color: "white", fontSize: "0.875rem" }}
                   />
                 )}
@@ -460,8 +460,8 @@ export const Navbar = () => {
           </Collapse>
 
           {[
-            { to: "/tire-change-history", icon: faCar, label: "Tire Changes" },
-            { to: "/car-maintenance", icon: faWrench, label: "Vehicle Maintenance" },
+            { to: "/tire-change-history", icon: faCar, label: "Trocas de Pneus" },
+            { to: "/car-maintenance", icon: faWrench, label: "Manutenção de Veículos" },
           ].map((item) => (
             <ListItem
               key={item.to}

@@ -30,7 +30,7 @@ const MaintenanceTypeList: React.FC = () => {
             );
             
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
             
             const data = await response.json();
@@ -39,7 +39,7 @@ const MaintenanceTypeList: React.FC = () => {
             setValidLimits(data.validLimits || [10]);
             setError(null);
         } catch (err) {
-            setError('Failed to load maintenance types. Please try again.');
+            setError('Falha ao carregar os tipos de manutenção. Por favor, tente novamente.');
             console.error('Error fetching maintenance types:', err);
         } finally {
             setLoading(false);
@@ -82,14 +82,14 @@ const MaintenanceTypeList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             await fetchMaintenanceTypes();
             setShowForm(false);
-            toast.success('Maintenance type added successfully!');
+            toast.success('Tipo de manutenção adicionado com sucesso!');
         } catch (err) {
-            toast.error('Error adding maintenance type.');
+            toast.error('Erro ao adicionar tipo de manutenção.');
             console.error('Error adding maintenance type:', err);
         }
     };
@@ -107,14 +107,14 @@ const MaintenanceTypeList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             await fetchMaintenanceTypes();
             setEditingType(null);
-            toast.success('Maintenance type updated successfully!');
+            toast.success('Tipo de manutenção atualizado com sucesso!');
         } catch (err) {
-            toast.error('Error updating maintenance type.');
+            toast.error('Erro ao atualizar tipo de manutenção.');
             console.error('Error updating maintenance type:', err);
         }
     };
@@ -129,13 +129,13 @@ const MaintenanceTypeList: React.FC = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'Error deleting maintenance type.');
+                throw new Error(data.message || 'Erro ao excluir tipo de manutenção.');
             }
 
             await fetchMaintenanceTypes();
             setDeleteModalOpen(false);
             setDeletingType(null);
-            toast.success('Maintenance type deleted successfully!');
+            toast.success('Tipo de manutenção excluído com sucesso!');
         } catch (err: any) {
             toast.error(err.message);
             console.error('Error deleting maintenance type:', err);
@@ -157,14 +157,14 @@ const MaintenanceTypeList: React.FC = () => {
             });
 
             if (response.ok) {
-                toast.success(`Maintenance type ${type.status === 'active' ? 'deactivated' : 'activated'} successfully!`);
+                toast.success(`Tipo de manutenção ${type.status === 'active' ? 'desativado' : 'ativado'} com sucesso!`);
                 fetchMaintenanceTypes();
             } else {
-                throw new Error('Failed to change maintenance type status');
+                throw new Error('Falha ao alterar o status do tipo de manutenção');
             }
         } catch (error) {
             console.error('Status change error:', error);
-            toast.error('Error changing maintenance type status');
+            toast.error('Erro ao alterar o status do tipo de manutenção');
         }
     };
 
@@ -173,7 +173,7 @@ const MaintenanceTypeList: React.FC = () => {
             <div className="container mt-4">
                 <div className="d-flex justify-content-center">
                     <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                        <span className="visually-hidden">Carregando...</span>
                     </div>
                 </div>
             </div>
@@ -193,7 +193,7 @@ const MaintenanceTypeList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Maintenance Types</h2>
+                <h2>Tipos de Manutenção</h2>
                 <div className="d-flex gap-2 align-items-center">
                     <div className="d-flex align-items-center">
                         <label className="me-2" htmlFor="statusFilter">Status:</label>
@@ -207,9 +207,9 @@ const MaintenanceTypeList: React.FC = () => {
                             }}
                             style={{ width: 'auto' }}
                         >
-                            <option value="all">All</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="all">Todos</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
                         </select>
                     </div>
                     {!showForm && !editingType && (
@@ -217,7 +217,7 @@ const MaintenanceTypeList: React.FC = () => {
                             className="btn btn-primary" 
                             onClick={() => setShowForm(true)}
                         >
-                            Add New Maintenance Type
+                            Adicionar Novo Tipo de Manutenção
                         </button>
                     )}
                 </div>
@@ -226,12 +226,12 @@ const MaintenanceTypeList: React.FC = () => {
             {showForm && !editingType && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Add Maintenance Type</h5>
+                        <h5 className="mb-0">Adicionar Tipo de Manutenção</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setShowForm(false)}
                         >
-                            Cancel
+                            Cancelar
                         </button>
                     </div>
                     <div className="card-body">
@@ -249,12 +249,12 @@ const MaintenanceTypeList: React.FC = () => {
             {editingType && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Edit Maintenance Type</h5>
+                        <h5 className="mb-0">Editar Tipo de Manutenção</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setEditingType(null)}
                         >
-                            Cancel
+                            Cancelar
                         </button>
                     </div>
                     <div className="card-body">
@@ -278,15 +278,15 @@ const MaintenanceTypeList: React.FC = () => {
                     setDeletingType(null);
                 }}
                 onConfirm={() => deletingType?.id && handleDeleteType(deletingType.id)}
-                title="Confirm Deletion"
-                message={`Are you sure you want to delete the maintenance type "${deletingType?.name}"?`}
-                confirmButtonText="Delete"
+                title="Confirmar Exclusão"
+                message={`Tem certeza que deseja excluir o tipo de manutenção "${deletingType?.name}"?`}
+                confirmButtonText="Excluir"
                 isLoading={isDeleting}
             />
 
             {maintenanceTypes.length === 0 ? (
                 <div className="alert alert-info">
-                    No maintenance types registered.
+                    Nenhum tipo de manutenção registrado.
                 </div>
             ) : (
                 <>
@@ -294,11 +294,11 @@ const MaintenanceTypeList: React.FC = () => {
                         <table className="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th onClick={() => handleSort('name')}>Name</th>
-                                    <th onClick={() => handleSort('recurrency')}>Recurrence (Km)</th>
-                                    <th onClick={() => handleSort('recurrency_date')}>Recurrence (Months)</th>
+                                    <th onClick={() => handleSort('name')}>Nome</th>
+                                    <th onClick={() => handleSort('recurrency')}>Recorrência (Km)</th>
+                                    <th onClick={() => handleSort('recurrency_date')}>Recorrência (Meses)</th>
                                     <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -306,10 +306,10 @@ const MaintenanceTypeList: React.FC = () => {
                                     <tr key={type.id} className={type.status === 'inactive' ? 'table-secondary' : ''}>
                                         <td>{type.name}</td>
                                         <td>{type.recurrency} km</td>
-                                        <td>{type.recurrency_date} months</td>
+                                        <td>{type.recurrency_date} meses</td>
                                         <td>
                                             <span className={`badge ${type.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                                                {type.status === 'active' ? 'Active' : 'Inactive'}
+                                                {type.status === 'active' ? 'Ativo' : 'Inativo'}
                                             </span>
                                         </td>
                                         <td>
@@ -318,13 +318,13 @@ const MaintenanceTypeList: React.FC = () => {
                                                     className="btn btn-sm btn-outline-primary"
                                                     onClick={() => setEditingType(type)}
                                                 >
-                                                    Edit
+                                                    Editar
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-warning"
                                                     onClick={() => handleStatusChange(type)}
                                                 >
-                                                    {type.status === 'active' ? 'Deactivate' : 'Activate'}
+                                                    {type.status === 'active' ? 'Desativar' : 'Ativar'}
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-danger"
@@ -333,7 +333,7 @@ const MaintenanceTypeList: React.FC = () => {
                                                         setDeleteModalOpen(true);
                                                     }}
                                                 >
-                                                    Delete
+                                                    Excluir
                                                 </button>
                                             </div>
                                         </td>
@@ -345,7 +345,7 @@ const MaintenanceTypeList: React.FC = () => {
 
                     <div className="d-flex justify-content-between align-items-center mt-3">
                         <div className="d-flex align-items-center">
-                            <span className="me-2">Items per page:</span>
+                            <span className="me-2">Itens por página:</span>
                             <select 
                                 className="form-select form-select-sm" 
                                 style={{ width: 'auto' }}
@@ -366,7 +366,7 @@ const MaintenanceTypeList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage - 1)}
                                         disabled={currentPage === 1}
                                     >
-                                        Previous
+                                        Anterior
                                     </button>
                                 </li>
                                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -385,7 +385,7 @@ const MaintenanceTypeList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage + 1)}
                                         disabled={currentPage === totalPages}
                                     >
-                                        Next
+                                        Próximo
                                     </button>
                                 </li>
                             </ul>

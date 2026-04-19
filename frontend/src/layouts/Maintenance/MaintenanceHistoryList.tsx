@@ -31,7 +31,7 @@ const MaintenanceHistoryList: React.FC = () => {
             );
             
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
             
             const data = await response.json();
@@ -53,7 +53,7 @@ const MaintenanceHistoryList: React.FC = () => {
             setError(null);
         } catch (err) {
             console.error('Detailed error:', err);
-            setError('Failed to load maintenance history. Please try again.');
+            setError('Falha ao carregar o histórico de manutenção. Por favor, tente novamente.');
         } finally {
             setLoading(false);
         }
@@ -95,14 +95,14 @@ const MaintenanceHistoryList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             await fetchMaintenanceHistory();
             setShowForm(false);
-            toast.success('Maintenance record added successfully!');
+            toast.success('Registro de manutenção adicionado com sucesso!');
         } catch (err) {
-            toast.error('Error adding maintenance record.');
+            toast.error('Erro ao adicionar registro de manutenção.');
             console.error('Error adding maintenance history:', err);
         }
     };
@@ -120,14 +120,14 @@ const MaintenanceHistoryList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             await fetchMaintenanceHistory();
             setEditingHistory(null);
-            toast.success('Maintenance record updated successfully!');
+            toast.success('Registro de manutenção atualizado com sucesso!');
         } catch (err) {
-            toast.error('Error updating maintenance record.');
+            toast.error('Erro ao atualizar registro de manutenção.');
             console.error('Error updating maintenance history:', err);
         }
     };
@@ -140,15 +140,15 @@ const MaintenanceHistoryList: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             await fetchMaintenanceHistory();
             setDeleteModalOpen(false);
             setDeletingHistory(null);
-            toast.success('Maintenance record deleted successfully!');
+            toast.success('Registro de manutenção excluído com sucesso!');
         } catch (err) {
-            toast.error('Error deleting maintenance record.');
+            toast.error('Erro ao excluir registro de manutenção.');
             console.error('Error deleting maintenance history:', err);
         } finally {
             setIsDeleting(false);
@@ -168,14 +168,14 @@ const MaintenanceHistoryList: React.FC = () => {
             });
 
             if (response.ok) {
-                toast.success(`Car ${history.carStatus === 'active' ? 'deactivated' : 'activated'} successfully!`);
+                toast.success(`Carro ${history.carStatus === 'active' ? 'desativado' : 'ativado'} com sucesso!`);
                 fetchMaintenanceHistory();
             } else {
-                throw new Error('Failed to change car status');
+                throw new Error('Falha ao alterar o status do carro');
             }
         } catch (error) {
             console.error('Status change error:', error);
-            toast.error('Error changing car status');
+            toast.error('Erro ao alterar o status do carro');
         }
     };
 
@@ -186,7 +186,7 @@ const MaintenanceHistoryList: React.FC = () => {
 
     const formatNumber = (value: string | number): string => {
         const num = typeof value === 'string' ? parseFloat(value) : value;
-        return !isNaN(num) ? num.toFixed(2) : '0.00';
+        return !isNaN(num) ? num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
     };
 
     if (loading) {
@@ -194,7 +194,7 @@ const MaintenanceHistoryList: React.FC = () => {
             <div className="container mt-4">
                 <div className="d-flex justify-content-center">
                     <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
+                        <span className="visually-hidden">Carregando...</span>
                     </div>
                 </div>
             </div>
@@ -214,10 +214,10 @@ const MaintenanceHistoryList: React.FC = () => {
     return (
         <div className="container mt-4">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h2>Maintenance History</h2>
+                <h2>Histórico de Manutenção</h2>
                 <div className="d-flex gap-2 align-items-center">
                     <div className="d-flex align-items-center">
-                        <label className="me-2" htmlFor="statusFilter">Vehicle Status:</label>
+                        <label className="me-2" htmlFor="statusFilter">Status do Veículo:</label>
                         <select
                             id="statusFilter"
                             className="form-select form-select-sm"
@@ -228,9 +228,9 @@ const MaintenanceHistoryList: React.FC = () => {
                             }}
                             style={{ width: 'auto' }}
                         >
-                            <option value="all">All</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="all">Todos</option>
+                            <option value="active">Ativos</option>
+                            <option value="inactive">Inativos</option>
                         </select>
                     </div>
                 </div>
@@ -242,24 +242,24 @@ const MaintenanceHistoryList: React.FC = () => {
                         className="btn btn-primary" 
                         onClick={() => setShowForm(true)}
                     >
-                        Add New Maintenance
+                        Adicionar Nova Manutenção
                     </button>
                 )}
                 
                 <Link to="/maintenance/types" className="btn btn-outline-primary">
-                    Manage Maintenance Types
+                    Gerenciar Tipos de Manutenção
                 </Link>
             </div>
 
             {showForm && !editingHistory && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Add Maintenance Record</h5>
+                        <h5 className="mb-0">Adicionar Registro de Manutenção</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setShowForm(false)}
                         >
-                            Cancel
+                            Cancelar
                         </button>
                     </div>
                     <div className="card-body">
@@ -277,12 +277,12 @@ const MaintenanceHistoryList: React.FC = () => {
             {editingHistory && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <h5 className="mb-0">Edit Maintenance Record</h5>
+                        <h5 className="mb-0">Editar Registro de Manutenção</h5>
                         <button 
                             className="btn btn-sm btn-outline-secondary" 
                             onClick={() => setEditingHistory(null)}
                         >
-                            Cancel
+                            Cancelar
                         </button>
                     </div>
                     <div className="card-body">
@@ -306,15 +306,15 @@ const MaintenanceHistoryList: React.FC = () => {
                     setDeletingHistory(null);
                 }}
                 onConfirm={() => deletingHistory?.id && handleDeleteHistory(deletingHistory.id)}
-                title="Confirm Deletion"
-                message={`Are you sure you want to delete this maintenance record for vehicle ${deletingHistory?.make} ${deletingHistory?.model} - ${deletingHistory?.license_plate}?`}
-                confirmButtonText="Delete"
+                title="Confirmar Exclusão"
+                message={`Tem certeza que deseja excluir este registro de manutenção para o veículo ${deletingHistory?.make} ${deletingHistory?.model} - ${deletingHistory?.license_plate}?`}
+                confirmButtonText="Excluir"
                 isLoading={isDeleting}
             />
 
             {!loading && maintenanceHistory.length === 0 ? (
                 <div className="alert alert-info">
-                    No maintenance records registered.
+                    Nenhum registro de manutenção encontrado.
                 </div>
             ) : (
                 <>
@@ -323,13 +323,13 @@ const MaintenanceHistoryList: React.FC = () => {
                             <thead>
                                 <tr>
                                     <th onClick={() => handleSort('id')}>ID</th>
-                                    <th onClick={() => handleSort('vehicle')}>Vehicle</th>
-                                    <th onClick={() => handleSort('maintenance_type')}>Maintenance Type</th>
-                                    <th onClick={() => handleSort('maintenance_date')}>Date</th>
-                                    <th onClick={() => handleSort('maintenance_kilometers')}>Mileage</th>
-                                    <th onClick={() => handleSort('recurrency')}>Recurrence</th>
-                                    <th>Car Status</th>
-                                    <th>Actions</th>
+                                    <th onClick={() => handleSort('vehicle')}>Veículo</th>
+                                    <th onClick={() => handleSort('maintenance_type')}>Tipo de Manutenção</th>
+                                    <th onClick={() => handleSort('maintenance_date')}>Data</th>
+                                    <th onClick={() => handleSort('maintenance_kilometers')}>Quilometragem</th>
+                                    <th onClick={() => handleSort('recurrency')}>Recorrência</th>
+                                    <th>Status do Carro</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -343,7 +343,7 @@ const MaintenanceHistoryList: React.FC = () => {
                                         <td>{history.recurrency} km</td>
                                         <td>
                                             <span className={`badge ${history.carStatus === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                                                {history.carStatus === 'active' ? 'Active' : 'Inactive'}
+                                                {history.carStatus === 'active' ? 'Ativo' : 'Inativo'}
                                             </span>
                                         </td>
                                         <td>
@@ -352,13 +352,13 @@ const MaintenanceHistoryList: React.FC = () => {
                                                     className="btn btn-sm btn-outline-primary"
                                                     onClick={() => setEditingHistory(history)}
                                                 >
-                                                    Edit
+                                                    Editar
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-warning"
                                                     onClick={() => handleStatusChange(history)}
                                                 >
-                                                    {history.carStatus === 'active' ? 'Deactivate' : 'Activate'}
+                                                    {history.carStatus === 'active' ? 'Desativar' : 'Ativar'}
                                                 </button>
                                                 <button
                                                     className="btn btn-sm btn-outline-danger"
@@ -367,7 +367,7 @@ const MaintenanceHistoryList: React.FC = () => {
                                                         setDeleteModalOpen(true);
                                                     }}
                                                 >
-                                                    Delete
+                                                    Excluir
                                                 </button>
                                             </div>
                                         </td>
@@ -379,7 +379,7 @@ const MaintenanceHistoryList: React.FC = () => {
 
                     <div className="d-flex justify-content-between align-items-center mt-3">
                         <div className="d-flex align-items-center">
-                            <span className="me-2">Items per page:</span>
+                            <span className="me-2">Itens por página:</span>
                             <select 
                                 className="form-select form-select-sm" 
                                 style={{ width: 'auto' }}
@@ -400,7 +400,7 @@ const MaintenanceHistoryList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage - 1)}
                                         disabled={currentPage === 1}
                                     >
-                                        Previous
+                                        Anterior
                                     </button>
                                 </li>
                                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -419,7 +419,7 @@ const MaintenanceHistoryList: React.FC = () => {
                                         onClick={() => handlePageChange(currentPage + 1)}
                                         disabled={currentPage === totalPages}
                                     >
-                                        Next
+                                        Próximo
                                     </button>
                                 </li>
                             </ul>

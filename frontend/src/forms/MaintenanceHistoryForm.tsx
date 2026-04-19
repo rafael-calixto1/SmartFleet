@@ -36,7 +36,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                 // Fetch cars
                 const carsResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cars`);
                 if (!carsResponse.ok) {
-                    throw new Error('Failed to fetch cars');
+                    throw new Error('Falha ao buscar carros');
                 }
                 const carsData = await carsResponse.json();
                 // Extract the cars array from the response
@@ -46,14 +46,14 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                 // Fetch maintenance types
                 const typesResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/maintenance/types`);
                 if (!typesResponse.ok) {
-                    throw new Error('Failed to fetch maintenance types');
+                    throw new Error('Falha ao buscar tipos de manutenção');
                 }
                 const typesData = await typesResponse.json();
                 // Extract the maintenance types array from the response
                 setMaintenanceTypes(typesData.maintenanceTypes || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                toast.error('Error loading data. Please try again.');
+                toast.error('Erro ao carregar dados. Por favor, tente novamente.');
             } finally {
                 setLoading(false);
             }
@@ -66,19 +66,19 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
         const newErrors: Partial<Record<keyof MaintenanceHistoryModel, string>> = {};
         
         if (!maintenanceHistory.car_id) {
-            newErrors.car_id = 'Select a vehicle';
+            newErrors.car_id = 'Selecione um veículo';
         }
         
         if (!maintenanceHistory.maintenance_type_id) {
-            newErrors.maintenance_type_id = 'Select a maintenance type';
+            newErrors.maintenance_type_id = 'Selecione um tipo de manutenção';
         }
         
         if (!maintenanceHistory.maintenance_date) {
-            newErrors.maintenance_date = 'Maintenance date is required';
+            newErrors.maintenance_date = 'A data de manutenção é obrigatória';
         }
         
         if (!maintenanceHistory.maintenance_kilometers || maintenanceHistory.maintenance_kilometers <= 0) {
-            newErrors.maintenance_kilometers = 'Mileage must be a positive number';
+            newErrors.maintenance_kilometers = 'A quilometragem deve ser um número positivo';
         }
         
         setErrors(newErrors);
@@ -136,7 +136,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             });
 
             if (!response.ok) {
-                throw new Error(`Error: ${response.status}`);
+                throw new Error(`Erro: ${response.status}`);
             }
 
             if (onSuccess) {
@@ -147,10 +147,10 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                 setMaintenanceHistory(emptyMaintenanceHistory);
             }
 
-            toast.success(`Maintenance ${isEditing ? 'updated' : 'registered'} successfully!`);
+            toast.success(`Manutenção ${isEditing ? 'atualizada' : 'registrada'} com sucesso!`);
         } catch (error) {
             console.error('Error submitting maintenance:', error);
-            toast.error(`Error ${isEditing ? 'updating' : 'registering'} maintenance.`);
+            toast.error(`Erro ao ${isEditing ? 'atualizar' : 'registrar'} manutenção.`);
         } finally {
             setIsSubmitting(false);
         }
@@ -159,7 +159,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
     if (loading) {
         return <div className="d-flex justify-content-center">
             <div className="spinner-border" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Carregando...</span>
             </div>
         </div>;
     }
@@ -167,7 +167,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
     return (
         <form onSubmit={handleSubmit} className="needs-validation">
             <div className="mb-3">
-                <label htmlFor="car_id" className="form-label">Vehicle</label>
+                <label htmlFor="car_id" className="form-label">Veículo</label>
                 <select
                     className={`form-select ${errors.car_id ? 'is-invalid' : ''}`}
                     id="car_id"
@@ -177,7 +177,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                     required
                     disabled={isSubmitting}
                 >
-                    <option value="">Select a vehicle</option>
+                    <option value="">Selecione um veículo</option>
                     {cars.map(car => (
                         <option key={car.id} value={car.id}>
                             {car.make} {car.model} - {car.license_plate}
@@ -188,7 +188,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="maintenance_type_id" className="form-label">Maintenance Type</label>
+                <label htmlFor="maintenance_type_id" className="form-label">Tipo de Manutenção</label>
                 <select
                     className={`form-select ${errors.maintenance_type_id ? 'is-invalid' : ''}`}
                     id="maintenance_type_id"
@@ -198,10 +198,10 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                     required
                     disabled={isSubmitting}
                 >
-                    <option value="">Select a maintenance type</option>
+                    <option value="">Selecione um tipo de manutenção</option>
                     {maintenanceTypes.map(type => (
                         <option key={type.id} value={type.id}>
-                            {type.name} (Recurrence: {type.recurrency} km)
+                            {type.name} (Recorrência: {type.recurrency} km)
                         </option>
                     ))}
                 </select>
@@ -209,7 +209,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="maintenance_date" className="form-label">Maintenance Date</label>
+                <label htmlFor="maintenance_date" className="form-label">Data de Manutenção</label>
                 <input
                     type="date"
                     className={`form-control ${errors.maintenance_date ? 'is-invalid' : ''}`}
@@ -224,7 +224,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="maintenance_kilometers" className="form-label">Mileage</label>
+                <label htmlFor="maintenance_kilometers" className="form-label">Quilometragem</label>
                 <input
                     type="number"
                     className={`form-control ${errors.maintenance_kilometers ? 'is-invalid' : ''}`}
@@ -240,7 +240,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="recurrency" className="form-label">Recurrence (in Km)</label>
+                <label htmlFor="recurrency" className="form-label">Recorrência (em Km)</label>
                 <input
                     type="number"
                     className="form-control"
@@ -252,12 +252,12 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
                     disabled={isSubmitting}
                 />
                 <small className="form-text text-muted">
-                    Leave blank to use the default recurrence of the maintenance type.
+                    Deixe em branco para usar a recorrência padrão do tipo de manutenção.
                 </small>
             </div>
 
             <div className="mb-3">
-                <label htmlFor="observation" className="form-label">Observations</label>
+                <label htmlFor="observation" className="form-label">Observações</label>
                 <textarea
                     className="form-control"
                     id="observation"
@@ -270,7 +270,7 @@ const MaintenanceHistoryForm: React.FC<MaintenanceHistoryFormProps> = ({
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? 'Processing...' : (isEditing ? 'Update' : 'Add') + ' Maintenance Record'}
+                {isSubmitting ? 'Processando...' : (isEditing ? 'Atualizar' : 'Adicionar') + ' Registro de Manutenção'}
             </button>
         </form>
     );

@@ -50,7 +50,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         }
       } catch (error) {
         console.error("Error fetching drivers:", error);
-        toast.error("Failed to load drivers. Please try again later.");
+        toast.error("Falha ao carregar motoristas. Por favor, tente novamente mais tarde.");
       } finally {
         setLoading(false);
       }
@@ -95,13 +95,13 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Error saving car');
+        throw new Error('Erro ao salvar o carro');
       }
 
       onSuccess?.();
     } catch (error) {
       console.error('Error:', error);
-      toast.error(initialData?.id ? 'Error updating car' : 'Error creating car');
+      toast.error(initialData?.id ? 'Erro ao atualizar o carro' : 'Erro ao criar o carro');
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +111,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
     <form onSubmit={handleSubmit}>
       <div style={{ display: 'grid', gap: '1rem', padding: '1rem' }}>
         <TextField
-          label="Brand"
+          label="Marca"
           name="make"
           value={carData.make}
           onChange={handleChange}
@@ -121,7 +121,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Model"
+          label="Modelo"
           name="model"
           value={carData.model}
           onChange={handleChange}
@@ -131,7 +131,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Current Kilometers"
+          label="Quilometragem Atual"
           name="current_kilometers"
           type="number"
           value={carData.current_kilometers}
@@ -142,7 +142,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <TextField
-          label="Next Tire Change (km)"
+          label="Próxima Troca de Pneus (km)"
           name="next_tire_change"
           type="number"
           value={carData.next_tire_change}
@@ -161,11 +161,11 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
               disabled={isSubmitting}
             />
           }
-          label="Is next tire change bigger?"
+          label="A próxima troca de pneus é maior?"
         />
 
         <TextField
-          label="Next Oil Change (km)"
+          label="Próxima Troca de Óleo (km)"
           name="next_oil_change"
           type="number"
           value={carData.next_oil_change}
@@ -184,11 +184,11 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
               disabled={isSubmitting}
             />
           }
-          label="Is next oil change bigger?"
+          label="A próxima troca de óleo é maior?"
         />
 
         <TextField
-          label="License Plate"
+          label="Placa"
           name="license_plate"
           value={carData.license_plate}
           onChange={handleChange}
@@ -198,17 +198,17 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
         />
 
         <FormControl fullWidth>
-          <InputLabel id="driver-label">Driver</InputLabel>
+          <InputLabel id="driver-label">Motorista</InputLabel>
           <Select
             labelId="driver-label"
             name="driver_id"
             value={carData.driver_id}
             onChange={handleChange}
-            label="Driver"
+            label="Motorista"
             disabled={isSubmitting || loading}
           >
             <MenuItem value={undefined}>
-              <em>None</em>
+              <em>Nenhum</em>
             </MenuItem>
             {drivers.map((driver) => (
               <MenuItem key={driver.id} value={driver.id}>
@@ -223,7 +223,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, onSuccess }) => {
           disabled={isSubmitting}
           style={{ marginTop: '1rem' }}
         >
-          {isSubmitting ? 'Saving...' : (initialData?.id ? 'Update' : 'Add')}
+          {isSubmitting ? 'Salvando...' : (initialData?.id ? 'Atualizar' : 'Adicionar')}
         </PrimaryButton>
       </div>
     </form>

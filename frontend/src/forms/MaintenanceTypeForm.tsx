@@ -24,15 +24,15 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
         const newErrors: Partial<Record<keyof MaintenanceTypeModel, string>> = {};
         
         if (!maintenanceType.name.trim()) {
-            newErrors.name = 'Maintenance type name is required';
+            newErrors.name = 'O nome do tipo de manutenção é obrigatório';
         }
         
         if (!maintenanceType.recurrency || maintenanceType.recurrency <= 0) {
-            newErrors.recurrency = 'Recurrence must be a positive number';
+            newErrors.recurrency = 'A recorrência deve ser um número positivo';
         }
         
         if (!maintenanceType.recurrency_date) {
-            newErrors.recurrency_date = 'Recurrence date is required';
+            newErrors.recurrency_date = 'A data de recorrência é obrigatória';
         }
         
         setErrors(newErrors);
@@ -51,7 +51,7 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
         e.preventDefault();
         
         if (!validateForm()) {
-            toast.error('Please correct the errors in the form.');
+            toast.error('Por favor, corrija os erros no formulário.');
             return;
         }
         
@@ -73,7 +73,7 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
             }
         } catch (error) {
             console.error('Error submitting maintenance type:', error);
-            toast.error(`Error ${isEditing ? 'updating' : 'adding'} maintenance type.`);
+            toast.error(`Erro ao ${isEditing ? 'atualizar' : 'adicionar'} tipo de manutenção.`);
         } finally {
             setIsSubmitting(false);
         }
@@ -82,7 +82,7 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
     return (
         <form onSubmit={handleSubmit} className="needs-validation">
             <div className="mb-3">
-                <label htmlFor="name" className="form-label">Maintenance Type Name</label>
+                <label htmlFor="name" className="form-label">Nome do Tipo de Manutenção</label>
                 <input
                     type="text"
                     className={`form-control ${errors.name ? 'is-invalid' : ''}`}
@@ -97,7 +97,7 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="recurrency" className="form-label">Recurrence (in Km)</label>
+                <label htmlFor="recurrency" className="form-label">Recorrência (em Km)</label>
                 <input
                     type="number"
                     className={`form-control ${errors.recurrency ? 'is-invalid' : ''}`}
@@ -113,7 +113,7 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
             </div>
 
             <div className="mb-3">
-                <label htmlFor="recurrency_date" className="form-label">Recurrence in Months</label>
+                <label htmlFor="recurrency_date" className="form-label">Recorrência em Meses</label>
                 <input
                     type="number"
                     className={`form-control ${errors.recurrency_date ? 'is-invalid' : ''}`}
@@ -126,13 +126,13 @@ const MaintenanceTypeForm: React.FC<MaintenanceTypeFormProps> = ({
                     disabled={isSubmitting}
                 />
                 <small className="form-text text-muted">
-                    Number of months for the next maintenance
+                    Número de meses para a próxima manutenção
                 </small>
                 {errors.recurrency_date && <div className="invalid-feedback">{errors.recurrency_date}</div>}
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                {isSubmitting ? 'Processing...' : (isEditing ? 'Update' : 'Add') + ' Maintenance Type'}
+                {isSubmitting ? 'Processando...' : (isEditing ? 'Atualizar' : 'Adicionar') + ' Tipo de Manutenção'}
             </button>
         </form>
     );
