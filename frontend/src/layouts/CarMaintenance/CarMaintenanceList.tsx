@@ -63,8 +63,8 @@ const CarMaintenanceList = () => {
       }
     } catch (error: any) {
       console.error('Fetch error:', error.message);
-      setHttpError(`Error: ${error.message}`);
-      toast.error('Failed to load maintenances. Please try again.');
+      setHttpError(`Erro: ${error.message}`);
+      toast.error('Falha ao carregar manutenções. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -116,16 +116,16 @@ const CarMaintenanceList = () => {
       });
 
       if (response.ok) {
-        toast.success('Maintenance deleted successfully!');
+        toast.success('Manutenção excluída com sucesso!');
         fetchCarMaintenance();
         setDeleteModalOpen(false);
         setDeletingMaintenance(null);
       } else {
-        throw new Error('Failed to delete maintenance');
+        throw new Error('Falha ao excluir manutenção');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      toast.error('Error deleting maintenance. Please try again.');
+      toast.error('Erro ao excluir manutenção. Por favor, tente novamente.');
     } finally {
       setIsDeleting(false);
     }
@@ -135,7 +135,7 @@ const CarMaintenanceList = () => {
     setIsModalOpen(false);
     setEditingMaintenance(null);
     fetchCarMaintenance();
-    toast.success(editingMaintenance ? 'Maintenance updated successfully!' : 'Maintenance added successfully!');
+    toast.success(editingMaintenance ? 'Manutenção atualizada com sucesso!' : 'Manutenção adicionada com sucesso!');
   };
 
   if (isLoading) {
@@ -143,7 +143,7 @@ const CarMaintenanceList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -163,9 +163,9 @@ const CarMaintenanceList = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Maintenance List</h2>
+        <h2>Lista de Manutenções</h2>
         <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
-          Add Maintenance
+          Adicionar Manutenção
         </button>
       </div>
 
@@ -176,7 +176,7 @@ const CarMaintenanceList = () => {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    {editingMaintenance ? 'Edit Maintenance' : 'Add Maintenance'}
+                    {editingMaintenance ? 'Editar Manutenção' : 'Adicionar Manutenção'}
                   </h5>
                   <button
                     type="button"
@@ -211,15 +211,15 @@ const CarMaintenanceList = () => {
           setDeletingMaintenance(null);
         }}
         onConfirm={handleDelete}
-        title="Confirm Deletion"
-        message={`Are you sure you want to delete the maintenance for the vehicle ${deletingMaintenance?.carModel} - ${deletingMaintenance?.licensePlate}?`}
-        confirmButtonText="Delete"
+        title="Confirmar Exclusão"
+        message={`Tem certeza que deseja excluir a manutenção do veículo ${deletingMaintenance?.carModel} - ${deletingMaintenance?.licensePlate}?`}
+        confirmButtonText="Excluir"
         isLoading={isDeleting}
       />
 
       {carMaintenance.length === 0 ? (
         <div className="alert alert-info">
-          No maintenance registered.
+          Nenhuma manutenção registrada.
         </div>
       ) : (
         <>
@@ -228,12 +228,12 @@ const CarMaintenanceList = () => {
               <thead>
                 <tr>
                   <th onClick={() => handleSort('id')}>ID</th>
-                  <th onClick={() => handleSort('carModel')}>Vehicle</th>
-                  <th onClick={() => handleSort('maintenanceType')}>Maintenance Type</th>
-                  <th onClick={() => handleSort('maintenanceDate')}>Date</th>
-                  <th onClick={() => handleSort('maintenanceKilometers')}>Mileage</th>
-                  <th onClick={() => handleSort('recurrency')}>Recurrence (Km)</th>
-                  <th>Actions</th>
+                  <th onClick={() => handleSort('carModel')}>Veículo</th>
+                  <th onClick={() => handleSort('maintenanceType')}>Tipo de Manutenção</th>
+                  <th onClick={() => handleSort('maintenanceDate')}>Data</th>
+                  <th onClick={() => handleSort('maintenanceKilometers')}>Quilometragem</th>
+                  <th onClick={() => handleSort('recurrency')}>Recorrência (Km)</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -250,13 +250,13 @@ const CarMaintenanceList = () => {
                         className="btn btn-sm btn-outline-primary me-2"
                         onClick={() => handleEdit(maintenance)}
                       >
-                        Edit
+                        Editar
                       </button>
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDeleteClick(maintenance)}
                       >
-                        Delete
+                        Excluir
                       </button>
                     </td>
                   </tr>
@@ -267,7 +267,7 @@ const CarMaintenanceList = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="d-flex align-items-center">
-              <span className="me-2">Items per page:</span>
+              <span className="me-2">Itens por página:</span>
               <select
                 className="form-select form-select-sm"
                 style={{ width: 'auto' }}
@@ -288,7 +288,7 @@ const CarMaintenanceList = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    Anterior
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -310,7 +310,7 @@ const CarMaintenanceList = () => {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    Próximo
                   </button>
                 </li>
               </ul>

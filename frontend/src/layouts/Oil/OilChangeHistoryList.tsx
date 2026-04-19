@@ -95,7 +95,7 @@ const OilChangeHistoryList = () => {
     setIsModalOpen(false);
     setEditingOilChange(null);
     fetchOilChangeHistory();
-    toast.success(editingOilChange ? 'Oil change updated successfully!' : 'Oil change added successfully!');
+    toast.success(editingOilChange ? 'Troca de óleo atualizada com sucesso!' : 'Troca de óleo adicionada com sucesso!');
   };
 
   const handleEdit = (oilChange: OilChangeHistoryModel) => {
@@ -118,16 +118,16 @@ const OilChangeHistoryList = () => {
       });
 
       if (response.ok) {
-        toast.success('Oil change deleted successfully!');
+        toast.success('Troca de óleo excluída com sucesso!');
         fetchOilChangeHistory();
         setDeleteModalOpen(false);
         setDeletingOilChange(null);
       } else {
-        throw new Error('Failed to delete oil change');
+        throw new Error('Falha ao excluir troca de óleo');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      toast.error('Error deleting oil change. Please try again.');
+      toast.error('Erro ao excluir troca de óleo. Por favor, tente novamente.');
     } finally {
       setIsDeleting(false);
     }
@@ -146,14 +146,14 @@ const OilChangeHistoryList = () => {
       });
 
       if (response.ok) {
-        toast.success(`Car ${oilChange.carStatus === 'active' ? 'deactivated' : 'activated'} successfully!`);
+        toast.success(`Carro ${oilChange.carStatus === 'active' ? 'desativado' : 'ativado'} com sucesso!`);
         fetchOilChangeHistory();
       } else {
-        throw new Error('Failed to change car status');
+        throw new Error('Falha ao alterar status do carro');
       }
     } catch (error) {
       console.error('Status change error:', error);
-      toast.error('Error changing car status');
+      toast.error('Erro ao alterar status do carro');
     }
   };
 
@@ -162,7 +162,7 @@ const OilChangeHistoryList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -182,10 +182,10 @@ const OilChangeHistoryList = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Oil Change History</h2>
+        <h2>Histórico de Troca de Óleo</h2>
         <div className="d-flex gap-2 align-items-center">
           <div className="d-flex align-items-center">
-            <label className="me-2" htmlFor="statusFilter">Vehicle Status:</label>
+            <label className="me-2" htmlFor="statusFilter">Status do Veículo:</label>
             <select
               id="statusFilter"
               className="form-select form-select-sm"
@@ -196,9 +196,9 @@ const OilChangeHistoryList = () => {
               }}
               style={{ width: 'auto' }}
             >
-              <option value="all">All</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all">Todos</option>
+              <option value="active">Ativo</option>
+              <option value="inactive">Inativo</option>
             </select>
           </div>
           {!isModalOpen && (
@@ -209,7 +209,7 @@ const OilChangeHistoryList = () => {
                 setIsModalOpen(true);
               }}
             >
-              Add New Oil Change
+              Adicionar Nova Troca de Óleo
             </button>
           )}
         </div>
@@ -218,7 +218,7 @@ const OilChangeHistoryList = () => {
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">
-            <h5 className="mb-0">{editingOilChange ? 'Edit Oil Change' : 'Add New Oil Change'}</h5>
+            <h5 className="mb-0">{editingOilChange ? 'Editar Troca de Óleo' : 'Adicionar Nova Troca de Óleo'}</h5>
             <button 
               className="btn btn-sm btn-outline-secondary" 
               onClick={() => {
@@ -226,7 +226,7 @@ const OilChangeHistoryList = () => {
                 setEditingOilChange(null);
               }}
             >
-              Cancel
+              Cancelar
             </button>
           </div>
           <div className="card-body">
@@ -250,15 +250,15 @@ const OilChangeHistoryList = () => {
           setDeletingOilChange(null);
         }}
         onConfirm={handleDelete}
-        title="Confirm Deletion"
-        message={`Are you sure you want to delete this oil change for the vehicle ${deletingOilChange?.make} ${deletingOilChange?.model} - ${deletingOilChange?.license_plate}?`}
-        confirmButtonText="Delete"
+        title="Confirmar Exclusão"
+        message={`Tem certeza que deseja excluir esta troca de óleo para o veículo ${deletingOilChange?.make} ${deletingOilChange?.model} - ${deletingOilChange?.license_plate}?`}
+        confirmButtonText="Excluir"
         isLoading={isDeleting}
       />
 
       {oilChangeHistory.length === 0 ? (
         <div className="alert alert-info">
-          No oil changes registered.
+          Nenhuma troca de óleo registrada.
         </div>
       ) : (
         <>
@@ -267,13 +267,13 @@ const OilChangeHistoryList = () => {
               <thead>
                 <tr>
                   <th onClick={() => handleSort('id')}>ID</th>
-                  <th onClick={() => handleSort('car_id')}>Vehicle</th>
-                  <th onClick={() => handleSort('oil_change_date')}>Change Date</th>
-                  <th onClick={() => handleSort('oil_change_kilometers')}>Mileage</th>
-                  <th onClick={() => handleSort('liters_quantity')}>Liters</th>
-                  <th onClick={() => handleSort('total_cost')}>Total Cost</th>
-                  <th>Car Status</th>
-                  <th>Actions</th>
+                  <th onClick={() => handleSort('car_id')}>Veículo</th>
+                  <th onClick={() => handleSort('oil_change_date')}>Data da Troca</th>
+                  <th onClick={() => handleSort('oil_change_kilometers')}>Quilometragem</th>
+                  <th onClick={() => handleSort('liters_quantity')}>Litros</th>
+                  <th onClick={() => handleSort('total_cost')}>Custo Total</th>
+                  <th>Status do Carro</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -281,13 +281,13 @@ const OilChangeHistoryList = () => {
                   <tr key={history.id} className={history.carStatus === 'inactive' ? 'table-secondary' : ''}>
                     <td>{history.id}</td>
                     <td>{history.make} {history.model} - {history.license_plate}</td>
-                    <td>{format(new Date(history.oilChangeDate), 'MM/dd/yyyy HH:mm')}</td>
+                    <td>{format(new Date(history.oilChangeDate), 'dd/MM/yyyy HH:mm')}</td>
                     <td>{history.oilChangeKilometers} km</td>
                     <td>{history.liters_quantity}</td>
-                    <td>U$ {(Number(history.total_cost) || 0).toFixed(2)}</td>
+                    <td>R$ {(Number(history.total_cost) || 0).toFixed(2)}</td>
                     <td>
                       <span className={`badge ${history.carStatus === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                        {history.carStatus === 'active' ? 'Active' : 'Inactive'}
+                        {history.carStatus === 'active' ? 'Ativo' : 'Inativo'}
                       </span>
                     </td>
                     <td>
@@ -296,19 +296,19 @@ const OilChangeHistoryList = () => {
                           className="btn btn-sm btn-outline-primary"
                           onClick={() => handleEdit(history)}
                         >
-                          Edit
+                          Editar
                         </button>
                         <button
                           className="btn btn-sm btn-outline-warning"
                           onClick={() => handleStatusChange(history)}
                         >
-                          {history.carStatus === 'active' ? 'Deactivate' : 'Activate'}
+                          {history.carStatus === 'active' ? 'Desativar' : 'Ativar'}
                         </button>
                         <button
                           className="btn btn-sm btn-outline-danger"
                           onClick={() => handleDeleteClick(history)}
                         >
-                          Delete
+                          Excluir
                         </button>
                       </div>
                     </td>
@@ -320,7 +320,7 @@ const OilChangeHistoryList = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="d-flex align-items-center">
-              <span className="me-2">Items per page:</span>
+              <span className="me-2">Itens por página:</span>
               <select 
                 className="form-select form-select-sm" 
                 style={{ width: 'auto' }}
@@ -341,7 +341,7 @@ const OilChangeHistoryList = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    Anterior
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -360,7 +360,7 @@ const OilChangeHistoryList = () => {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    Próximo
                   </button>
                 </li>
               </ul>

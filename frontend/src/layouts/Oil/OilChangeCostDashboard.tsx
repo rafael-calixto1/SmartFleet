@@ -44,7 +44,7 @@ const OilChangeCostDashboard: React.FC = () => {
         );
         
         if (!response.ok) {
-          throw new Error('Failed to fetch oil change cost statistics');
+          throw new Error('Falha ao buscar estatísticas de custo de troca de óleo');
         }
 
         const data = await response.json();
@@ -53,14 +53,14 @@ const OilChangeCostDashboard: React.FC = () => {
         if (Array.isArray(data)) {
           setCostData(data);
         } else {
-          console.error('Expected array but got:', data);
+          console.error('Esperava array mas recebeu:', data);
           setCostData([]);
         }
         
         setError(null);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        console.error('Erro ao buscar dados:', err);
+        setError(err instanceof Error ? err.message : 'Ocorreu um erro');
       } finally {
         setIsLoading(false);
       }
@@ -73,7 +73,7 @@ const OilChangeCostDashboard: React.FC = () => {
     labels: costData.map(item => item.car_model),
     datasets: [
       {
-        label: 'Total Oil Change Cost (U$)',
+        label: 'Custo Total de Troca de Óleo (R$)',
         data: costData.map(item => item.total_cost),
         backgroundColor: 'rgba(255, 159, 64, 0.5)',
         borderColor: 'rgba(255, 159, 64, 1)',
@@ -90,7 +90,7 @@ const OilChangeCostDashboard: React.FC = () => {
       },
       title: {
         display: true,
-        text: 'Total Oil Change Cost by Car',
+        text: 'Custo Total de Troca de Óleo por Carro',
       },
     },
     scales: {
@@ -99,7 +99,7 @@ const OilChangeCostDashboard: React.FC = () => {
         ticks: {
           callback: function(tickValue: number | string) {
             const value = Number(tickValue);
-            return `U$ ${value.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
+            return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
           }
         }
       },
@@ -111,7 +111,7 @@ const OilChangeCostDashboard: React.FC = () => {
       <div className="container mt-4" style={{ marginLeft: '60px' }}>
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -130,12 +130,12 @@ const OilChangeCostDashboard: React.FC = () => {
 
   return (
     <div className="container-fluid p-4" style={{ marginLeft: '60px' }}>
-      <h1 className="mb-4">Oil Change Cost Dashboard</h1>
+      <h1 className="mb-4">Painel de Custos de Troca de Óleo</h1>
       
       <Row className="mb-4">
         <Col md={6}>
           <Form.Group>
-            <Form.Label>Start Date</Form.Label>
+            <Form.Label>Data de Início</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.startDate}
@@ -145,7 +145,7 @@ const OilChangeCostDashboard: React.FC = () => {
         </Col>
         <Col md={6}>
           <Form.Group>
-            <Form.Label>End Date</Form.Label>
+            <Form.Label>Data de Término</Form.Label>
             <Form.Control
               type="date"
               value={dateRange.endDate}
@@ -158,13 +158,13 @@ const OilChangeCostDashboard: React.FC = () => {
       <Row className="mb-4">
         <Col>
           <Card>
-            <Card.Header>Total Oil Change Cost by Car</Card.Header>
+            <Card.Header>Custo Total de Troca de Óleo por Carro</Card.Header>
             <Card.Body>
               {costData.length > 0 ? (
                 <Bar data={chartData} options={chartOptions} />
               ) : (
                 <div className="alert alert-info">
-                  No oil change data registered in the selected period.
+                  Nenhum dado de troca de óleo registrado no período selecionado.
                 </div>
               )}
             </Card.Body>

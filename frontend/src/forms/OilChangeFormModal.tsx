@@ -14,7 +14,7 @@ const OilChangeFormModal: React.FC<OilChangeFormModalProps> = ({ show, handleClo
 
   return (
     <Dialog open={show} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add Oil Change</DialogTitle>
+      <DialogTitle>Adicionar Troca de Óleo</DialogTitle>
       <DialogContent>
         <OilChangeForm 
           onSuccess={() => {
@@ -26,7 +26,7 @@ const OilChangeFormModal: React.FC<OilChangeFormModalProps> = ({ show, handleClo
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="secondary">
-          Close
+          Fechar
         </Button>
       </DialogActions>
     </Dialog>

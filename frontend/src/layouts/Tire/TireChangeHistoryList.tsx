@@ -34,7 +34,7 @@ const TireChangeHistoryList = () => {
       );
 
       if (!response.ok) {
-        throw new Error('Something went wrong!');
+        throw new Error('Algo deu errado!');
       }
 
       const responseData = await response.json();
@@ -58,7 +58,7 @@ const TireChangeHistoryList = () => {
       setHttpError(null);
     } catch (error: any) {
       setHttpError(error.message);
-      toast.error('Failed to load tire change history. Please try again.');
+      toast.error('Falha ao carregar o histórico de troca de pneus. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -109,16 +109,16 @@ const TireChangeHistoryList = () => {
       });
 
       if (response.ok) {
-        toast.success('Tire change deleted successfully!');
+        toast.success('Troca de pneus excluída com sucesso!');
         fetchTireChangeHistory();
         setDeleteModalOpen(false);
         setDeletingTireChange(null);
       } else {
-        throw new Error('Failed to delete tire change');
+        throw new Error('Falha ao excluir troca de pneus');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      toast.error('Error deleting tire change. Please try again.');
+      toast.error('Erro ao excluir troca de pneus. Por favor, tente novamente.');
     } finally {
       setIsDeleting(false);
     }
@@ -128,7 +128,7 @@ const TireChangeHistoryList = () => {
     setIsModalOpen(false);
     setEditingTireChange(null);
     fetchTireChangeHistory();
-    toast.success(editingTireChange ? 'Tire change updated successfully!' : 'Tire change added successfully!');
+    toast.success(editingTireChange ? 'Troca de pneus atualizada com sucesso!' : 'Troca de pneus adicionada com sucesso!');
   };
 
   const handleCarClick = (carId: number) => {
@@ -140,7 +140,7 @@ const TireChangeHistoryList = () => {
       <div className="container mt-4">
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Carregando...</span>
           </div>
         </div>
       </div>
@@ -160,9 +160,9 @@ const TireChangeHistoryList = () => {
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Tire Change History</h2>
+        <h2>Histórico de Troca de Pneus</h2>
         <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>
-          Add Tire Change
+          Adicionar Troca de Pneus
         </button>
       </div>
 
@@ -172,7 +172,7 @@ const TireChangeHistoryList = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  {editingTireChange ? 'Edit Tire Change' : 'Add Tire Change'}
+                  {editingTireChange ? 'Editar Troca de Pneus' : 'Adicionar Troca de Pneus'}
                 </h5>
                 <button
                   type="button"
@@ -205,15 +205,15 @@ const TireChangeHistoryList = () => {
           setDeletingTireChange(null);
         }}
         onConfirm={handleDelete}
-        title="Confirm Deletion"
-        message={`Are you sure you want to delete this tire change for the vehicle ${deletingTireChange?.make} ${deletingTireChange?.model} - ${deletingTireChange?.licensePlate}?`}
-        confirmButtonText="Delete"
+        title="Confirmar Exclusão"
+        message={`Tem certeza que deseja excluir esta troca de pneus para o veículo ${deletingTireChange?.make} ${deletingTireChange?.model} - ${deletingTireChange?.licensePlate}?`}
+        confirmButtonText="Excluir"
         isLoading={isDeleting}
       />
 
       {tireChangeHistory.length === 0 ? (
         <div className="alert alert-info">
-          No tire changes registered.
+          Nenhuma troca de pneus registrada.
         </div>
       ) : (
         <>
@@ -222,10 +222,10 @@ const TireChangeHistoryList = () => {
               <thead>
                 <tr>
                   <th onClick={() => handleSort('id')}>ID</th>
-                  <th onClick={() => handleSort('car_id')}>Vehicle</th>
-                  <th onClick={() => handleSort('tire_change_date')}>Change Date</th>
-                  <th onClick={() => handleSort('tire_change_kilometers')}>Mileage</th>
-                  <th>Actions</th>
+                  <th onClick={() => handleSort('car_id')}>Veículo</th>
+                  <th onClick={() => handleSort('tire_change_date')}>Data da Troca</th>
+                  <th onClick={() => handleSort('tire_change_kilometers')}>Quilometragem</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -241,20 +241,20 @@ const TireChangeHistoryList = () => {
                         {history.make} {history.model} - {history.licensePlate}
                       </span>
                     </td>
-                    <td>{format(new Date(history.tireChangeDate), 'MM/dd/yyyy')}</td>
+                    <td>{format(new Date(history.tireChangeDate), 'dd/MM/yyyy')}</td>
                     <td>{history.tireChangeKilometers} km</td>
                     <td>
                       <button
                         className="btn btn-sm btn-outline-primary me-2"
                         onClick={() => handleEdit(history)}
                       >
-                        Edit
+                        Editar
                       </button>
                       <button
                         className="btn btn-sm btn-outline-danger"
                         onClick={() => handleDeleteClick(history)}
                       >
-                        Delete
+                        Excluir
                       </button>
                     </td>
                   </tr>
@@ -265,7 +265,7 @@ const TireChangeHistoryList = () => {
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <div className="d-flex align-items-center">
-              <span className="me-2">Items per page:</span>
+              <span className="me-2">Itens por página:</span>
               <select
                 className="form-select form-select-sm"
                 style={{ width: 'auto' }}
@@ -286,7 +286,7 @@ const TireChangeHistoryList = () => {
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                   >
-                    Previous
+                    Anterior
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -308,7 +308,7 @@ const TireChangeHistoryList = () => {
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                   >
-                    Next
+                    Próximo
                   </button>
                 </li>
               </ul>

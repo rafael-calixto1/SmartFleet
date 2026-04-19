@@ -17,8 +17,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   onConfirm,
   title,
   message,
-  confirmButtonText = 'Confirm',
-  cancelButtonText = 'Cancel',
+  confirmButtonText = 'Confirmar',
+  cancelButtonText = 'Cancelar',
   isLoading = false
 }) => {
   if (!isOpen) return null;
@@ -71,7 +71,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
                 {isLoading ? (
                   <>
                     <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Deleting...
+                    Processando...
                   </>
                 ) : (
                   confirmButtonText

@@ -73,7 +73,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
         }
       } catch (error) {
         console.error("Error loading data:", error);
-        toast.error("Could not load necessary data.");
+        toast.error("Não foi possível carregar os dados necessários.");
         setMaintenanceTypes([]);
       }
     };
@@ -85,21 +85,21 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
     const newErrors: { [key: string]: string } = {};
 
     if (!maintenanceData.car_id) {
-      newErrors.car_id = 'Select a car';
+      newErrors.car_id = 'Selecione um carro';
     }
 
     if (!maintenanceData.maintenance_type_id) {
-      newErrors.maintenance_type_id = 'Select a maintenance type';
+      newErrors.maintenance_type_id = 'Selecione um tipo de manutenção';
     }
 
     if (!maintenanceData.maintenance_date) {
-      newErrors.maintenance_date = 'Select the maintenance date';
+      newErrors.maintenance_date = 'Selecione a data da manutenção';
     }
 
     if (!maintenanceData.maintenance_kilometers) {
-      newErrors.maintenance_kilometers = 'Enter the mileage';
+      newErrors.maintenance_kilometers = 'Informe a quilometragem';
     } else if (parseInt(maintenanceData.maintenance_kilometers) < 0) {
-      newErrors.maintenance_kilometers = 'Mileage cannot be negative';
+      newErrors.maintenance_kilometers = 'A quilometragem não pode ser negativa';
     }
 
     setErrors(newErrors);
@@ -159,7 +159,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       });
 
       if (response.status === 200 || response.status === 201) {
-        toast.success(initialData?.id ? 'Maintenance updated successfully!' : 'Maintenance registered successfully!');
+        toast.success(initialData?.id ? 'Manutenção atualizada com sucesso!' : 'Manutenção registrada com sucesso!');
         
         if (onSuccess) {
           onSuccess();
@@ -171,7 +171,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       }
     } catch (error: any) {
       console.error("Error registering maintenance:", error);
-      toast.error(error.response?.data?.message || "Error registering maintenance");
+      toast.error(error.response?.data?.message || "Erro ao registrar a manutenção");
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +180,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
   return (
     <form onSubmit={handleSubmit} className="needs-validation">
       <div className="mb-3">
-        <label htmlFor="car_id" className="form-label">Car</label>
+        <label htmlFor="car_id" className="form-label">Carro</label>
         <select
           id="car_id"
           name="car_id"
@@ -189,7 +189,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onChange={handleChange}
           disabled={isSubmitting}
         >
-          <option value="">Select a car</option>
+          <option value="">Selecione um carro</option>
           {cars.map((car) => (
             <option key={car.id} value={car.id}>
               {car.model} - {car.license_plate}
@@ -204,7 +204,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_type_id" className="form-label">Maintenance Type</label>
+        <label htmlFor="maintenance_type_id" className="form-label">Tipo de Manutenção</label>
         <select
           id="maintenance_type_id"
           name="maintenance_type_id"
@@ -213,7 +213,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onChange={handleChange}
           disabled={isSubmitting}
         >
-          <option value="">Select a maintenance type</option>
+          <option value="">Selecione um tipo de manutenção</option>
           {maintenanceTypes.map((type) => (
             <option key={type.id} value={type.id}>
               {type.name}
@@ -228,7 +228,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_date" className="form-label">Maintenance Date</label>
+        <label htmlFor="maintenance_date" className="form-label">Data da Manutenção</label>
         <input
           type="date"
           id="maintenance_date"
@@ -246,7 +246,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="maintenance_kilometers" className="form-label">Mileage</label>
+        <label htmlFor="maintenance_kilometers" className="form-label">Quilometragem</label>
         <input
           type="number"
           id="maintenance_kilometers"
@@ -264,7 +264,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
       </div>
 
       <div className="mb-3">
-        <label htmlFor="recurrency" className="form-label">Recurrence (Km)</label>
+        <label htmlFor="recurrency" className="form-label">Recorrência (Km)</label>
         <input
           type="number"
           id="recurrency"
@@ -275,7 +275,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           disabled={true}
         />
         <small className="form-text text-muted">
-          Recurrence is defined by the selected maintenance type.
+          A recorrência é definida pelo tipo de manutenção selecionado.
         </small>
       </div>
 
@@ -286,7 +286,7 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           onClick={onClose}
           disabled={isSubmitting}
         >
-          Cancel
+          Cancelar
         </button>
         <button 
           type="submit" 
@@ -296,10 +296,10 @@ const CarMaintenanceForm: React.FC<CarMaintenanceFormProps> = ({ onSuccess, onCl
           {isSubmitting ? (
             <>
               <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-              Saving...
+              Salvando...
             </>
           ) : (
-            initialData?.id ? 'Update' : 'Save'
+            initialData?.id ? 'Atualizar' : 'Salvar'
           )}
         </button>
       </div>

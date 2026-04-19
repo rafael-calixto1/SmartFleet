@@ -104,7 +104,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
           current_kilometers: oilChangeData.oil_change_kilometers,
         });
         
-        toast.success("Mileage updated successfully!", {
+        toast.success("Quilometragem atualizada com sucesso!", {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -121,7 +121,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         next_oil_change: oilChangeData.oil_change_kilometers + 10000,
       });
 
-      toast.success(initialData?.id ? "Oil change updated successfully!" : "Oil change registered successfully!", {
+      toast.success(initialData?.id ? "Troca de óleo atualizada com sucesso!" : "Troca de óleo registrada com sucesso!", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -153,7 +153,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
       }
     } catch (error) {
       console.error("Error registering oil change:", error);
-      toast.error("Error registering oil change. Please try again.", {
+      toast.error("Erro ao registrar troca de óleo. Por favor, tente novamente.", {
         position: "top-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -170,10 +170,10 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
 
   return (
     <div className="container my-5">
-      <h2 className="text-center mb-4">{initialData?.id ? 'Edit Oil Change' : 'Add New Oil Change'}</h2>
+      <h2 className="text-center mb-4">{initialData?.id ? 'Editar Troca de Óleo' : 'Adicionar Nova Troca de Óleo'}</h2>
       <form onSubmit={handleSubmit} className="bg-light p-4 rounded shadow-sm">
         <div className="mb-3">
-          <label className="form-label">Car:</label>
+          <label className="form-label">Carro:</label>
           <select
             name="car_id"
             value={oilChangeData.car_id}
@@ -182,7 +182,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
             className="form-control"
             disabled={isSubmitting}
           >
-            <option value="">Select a car</option>
+            <option value="">Selecione um carro</option>
             {cars.length > 0 ? (
               cars.map((car) => (
                 <option key={car.id} value={car.id}>
@@ -191,14 +191,14 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
               ))
             ) : (
               <option value="" disabled>
-                No cars available
+                Nenhum carro disponível
               </option>
             )}
           </select>
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Oil Change Date:</label>
+          <label className="form-label">Data da Troca de Óleo:</label>
           <input
             type="date"
             name="oil_change_date"
@@ -211,7 +211,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Mileage at Oil Change:</label>
+          <label className="form-label">Quilometragem na Troca de Óleo:</label>
           <input
             type="number"
             name="oil_change_kilometers"
@@ -224,7 +224,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Liters Quantity:</label>
+          <label className="form-label">Quantidade de Litros:</label>
           <input
             type="number"
             name="liters_quantity"
@@ -237,7 +237,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Price per Liter:</label>
+          <label className="form-label">Preço por Litro:</label>
           <input
             type="number"
             name="price_per_liter"
@@ -250,7 +250,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Total Cost:</label>
+          <label className="form-label">Custo Total:</label>
           <input
             type="number"
             name="total_cost"
@@ -262,7 +262,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Observation:</label>
+          <label className="form-label">Observação:</label>
           <textarea
             name="observation"
             value={oilChangeData.observation}
@@ -274,7 +274,7 @@ const OilChangeForm: React.FC<OilChangeFormProps> = ({ onSuccess, initialData, c
 
         <div className="d-grid gap-2">
           <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : (initialData?.id ? 'Update Oil Change' : 'Add Oil Change')}
+            {isSubmitting ? 'Processando...' : (initialData?.id ? 'Atualizar Troca de Óleo' : 'Adicionar Troca de Óleo')}
           </button>
         </div>
       </form>
