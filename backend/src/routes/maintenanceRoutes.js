@@ -9,6 +9,7 @@ router.get('/types', maintenanceTypeController.getAllMaintenanceTypes);
 router.get('/types/:id', maintenanceTypeController.getMaintenanceType);
 router.post('/types', maintenanceTypeController.createMaintenanceType);
 router.put('/types/:id', maintenanceTypeController.updateMaintenanceType);
+router.patch('/types/:id/status', maintenanceTypeController.updateMaintenanceTypeStatus);
 router.delete('/types/:id', maintenanceTypeController.deleteMaintenanceType);
 
 // Maintenance History Routes

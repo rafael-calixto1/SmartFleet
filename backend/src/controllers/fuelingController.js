@@ -76,6 +76,7 @@ const getFuelingHistory = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status || 'active'; // Default to 'active'
     const sortField = req.query.sortField || 'id';
     const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC';
 
@@ -99,8 +100,26 @@ const getFuelingHistory = async (req, res) => {
 
     const offset = (page - 1) * limit;
 
+    // Build the WHERE clause based on status
+    let statusCondition = '';
+    let statusParams = [];
+
+    if (status === 'active') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['active'];
+    } else if (status === 'inactive') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['inactive'];
+    }
+
     // Count total records
-    const [countResult] = await db.execute('SELECT COUNT(*) AS total FROM fueling_history');
+    const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM fueling_history fh
+      LEFT JOIN cars c ON fh.car_id = c.id
+      ${statusCondition}
+    `;
+    const [countResult] = await db.execute(countQuery, statusParams);
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
@@ -111,11 +130,12 @@ const getFuelingHistory = async (req, res) => {
         c.license_plate
       FROM fueling_history fh
       LEFT JOIN cars c ON fh.car_id = c.id
+      ${statusCondition}
       ORDER BY ${validSortFields[sortField]} ${sortOrder}, fh.id ASC
       LIMIT ${limit} OFFSET ${offset}
     `;
 
-    const [fuelingHistory] = await db.execute(query);
+    const [fuelingHistory] = await db.execute(query, statusParams);
 
     res.status(200).json({
       fuelingHistory,

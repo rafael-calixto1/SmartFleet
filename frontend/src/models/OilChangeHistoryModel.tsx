@@ -10,6 +10,7 @@ class OilChangeHistoryModel {
     make?: string;
     model?: string;
     license_plate?: string;
+    carStatus?: 'active' | 'inactive';
 
     constructor(
         id: number,
@@ -22,7 +23,8 @@ class OilChangeHistoryModel {
         observation?: string,
         make?: string,
         model?: string,
-        license_plate?: string
+        license_plate?: string,
+        carStatus?: 'active' | 'inactive'
     ) {
         this.id = id;
         this.carId = carId;
@@ -35,6 +37,7 @@ class OilChangeHistoryModel {
         this.make = make;
         this.model = model;
         this.license_plate = license_plate;
+        this.carStatus = carStatus;
     }
 }
 

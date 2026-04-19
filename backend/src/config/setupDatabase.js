@@ -19,6 +19,7 @@ async function setupDatabase() {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
+      socketPath: '/var/run/mysqld/mysqld.sock',
       multipleStatements: true
     });
 

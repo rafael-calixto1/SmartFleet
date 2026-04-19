@@ -22,6 +22,7 @@ const FuelingHistoryList = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingFueling, setDeletingFueling] = useState<FuelingHistoryModel | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('active');
 
   const fieldMapping: { [key: string]: string } = {
     'id': 'id',
@@ -42,7 +43,7 @@ const FuelingHistoryList = () => {
     try {
       const [fuelingResponse, carsResponse] = await Promise.all([
         fetch(
-          `${fuelingUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`
+          `${fuelingUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&status=${statusFilter}`
         ),
         fetch(carsUrl),
       ]);
@@ -93,7 +94,7 @@ const FuelingHistoryList = () => {
 
   useEffect(() => {
     fetchFuelingHistory();
-  }, [currentPage, limit, sortField, sortOrder]);
+  }, [currentPage, limit, sortField, sortOrder, statusFilter]);
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -183,20 +184,40 @@ const FuelingHistoryList = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Fueling History</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Fueling History</h2>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="d-flex align-items-center">
+            <label className="me-2" htmlFor="statusFilter">Vehicle Status:</label>
+            <select
+              id="statusFilter"
+              className="form-select form-select-sm"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value as 'all' | 'active' | 'inactive');
+                setCurrentPage(1);
+              }}
+              style={{ width: 'auto' }}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          {!isModalOpen && (
+            <button 
+              className="btn btn-primary" 
+              onClick={() => {
+                setEditingFueling(null);
+                setIsModalOpen(true);
+              }}
+            >
+              Add New Fueling
+            </button>
+          )}
+        </div>
+      </div>
       
-      {!isModalOpen && (
-        <button 
-          className="btn btn-primary mb-4" 
-          onClick={() => {
-            setEditingFueling(null);
-            setIsModalOpen(true);
-          }}
-        >
-          Add New Fueling
-        </button>
-      )}
-
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">

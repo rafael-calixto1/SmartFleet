@@ -17,6 +17,7 @@ const MaintenanceTypeList: React.FC = () => {
     const [validLimits, setValidLimits] = useState<number[]>([10]);
     const [sortField, setSortField] = useState<string>('id');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('active');
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deletingType, setDeletingType] = useState<MaintenanceTypeModel | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -25,7 +26,7 @@ const MaintenanceTypeList: React.FC = () => {
         try {
             setLoading(true);
             const response = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/maintenance/types?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`
+                `${process.env.REACT_APP_BACKEND_URL}/maintenance/types?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&status=${statusFilter}`
             );
             
             if (!response.ok) {
@@ -47,7 +48,7 @@ const MaintenanceTypeList: React.FC = () => {
 
     useEffect(() => {
         fetchMaintenanceTypes();
-    }, [currentPage, limit, sortField, sortOrder]);
+    }, [currentPage, limit, sortField, sortOrder, statusFilter]);
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -143,6 +144,30 @@ const MaintenanceTypeList: React.FC = () => {
         }
     };
 
+    const handleStatusChange = async (type: MaintenanceTypeModel) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/maintenance/types/${type.id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status: type.status === 'active' ? 'inactive' : 'active'
+                }),
+            });
+
+            if (response.ok) {
+                toast.success(`Maintenance type ${type.status === 'active' ? 'deactivated' : 'activated'} successfully!`);
+                fetchMaintenanceTypes();
+            } else {
+                throw new Error('Failed to change maintenance type status');
+            }
+        } catch (error) {
+            console.error('Status change error:', error);
+            toast.error('Error changing maintenance type status');
+        }
+    };
+
     if (loading) {
         return (
             <div className="container mt-4">
@@ -167,17 +192,37 @@ const MaintenanceTypeList: React.FC = () => {
 
     return (
         <div className="container mt-4">
-            <h2 className="mb-4">Maintenance Types</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2>Maintenance Types</h2>
+                <div className="d-flex gap-2 align-items-center">
+                    <div className="d-flex align-items-center">
+                        <label className="me-2" htmlFor="statusFilter">Status:</label>
+                        <select
+                            id="statusFilter"
+                            className="form-select form-select-sm"
+                            value={statusFilter}
+                            onChange={(e) => {
+                                setStatusFilter(e.target.value as 'all' | 'active' | 'inactive');
+                                setCurrentPage(1);
+                            }}
+                            style={{ width: 'auto' }}
+                        >
+                            <option value="all">All</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    {!showForm && !editingType && (
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => setShowForm(true)}
+                        >
+                            Add New Maintenance Type
+                        </button>
+                    )}
+                </div>
+            </div>
             
-            {!showForm && !editingType && (
-                <button 
-                    className="btn btn-primary mb-4" 
-                    onClick={() => setShowForm(true)}
-                >
-                    Add New Maintenance Type
-                </button>
-            )}
-
             {showForm && !editingType && (
                 <div className="card mb-4">
                     <div className="card-header d-flex justify-content-between align-items-center">
@@ -252,31 +297,45 @@ const MaintenanceTypeList: React.FC = () => {
                                     <th onClick={() => handleSort('name')}>Name</th>
                                     <th onClick={() => handleSort('recurrency')}>Recurrence (Km)</th>
                                     <th onClick={() => handleSort('recurrency_date')}>Recurrence (Months)</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {maintenanceTypes.map((type) => (
-                                    <tr key={type.id}>
+                                    <tr key={type.id} className={type.status === 'inactive' ? 'table-secondary' : ''}>
                                         <td>{type.name}</td>
                                         <td>{type.recurrency} km</td>
                                         <td>{type.recurrency_date} months</td>
                                         <td>
-                                            <button
-                                                className="btn btn-sm btn-outline-primary me-2"
-                                                onClick={() => setEditingType(type)}
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-danger"
-                                                onClick={() => {
-                                                    setDeletingType(type);
-                                                    setDeleteModalOpen(true);
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
+                                            <span className={`badge ${type.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
+                                                {type.status === 'active' ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="btn-group">
+                                                <button
+                                                    className="btn btn-sm btn-outline-primary"
+                                                    onClick={() => setEditingType(type)}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-warning"
+                                                    onClick={() => handleStatusChange(type)}
+                                                >
+                                                    {type.status === 'active' ? 'Deactivate' : 'Activate'}
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-danger"
+                                                    onClick={() => {
+                                                        setDeletingType(type);
+                                                        setDeleteModalOpen(true);
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

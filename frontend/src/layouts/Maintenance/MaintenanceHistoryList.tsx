@@ -21,12 +21,13 @@ const MaintenanceHistoryList: React.FC = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [deletingHistory, setDeletingHistory] = useState<MaintenanceHistoryModel | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('active');
 
     const fetchMaintenanceHistory = async () => {
         try {
             setLoading(true);
             const response = await fetch(
-                `${process.env.REACT_APP_BACKEND_URL}/maintenance/history?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`
+                `${process.env.REACT_APP_BACKEND_URL}/maintenance/history?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&status=${statusFilter}`
             );
             
             if (!response.ok) {
@@ -60,7 +61,7 @@ const MaintenanceHistoryList: React.FC = () => {
 
     useEffect(() => {
         fetchMaintenanceHistory();
-    }, [currentPage, limit, sortField, sortOrder]);
+    }, [currentPage, limit, sortField, sortOrder, statusFilter]);
 
     const handlePageChange = (pageNumber: number) => {
         if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -154,6 +155,30 @@ const MaintenanceHistoryList: React.FC = () => {
         }
     };
 
+    const handleStatusChange = async (history: MaintenanceHistoryModel) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cars/${history.car_id}/status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status: history.carStatus === 'active' ? 'inactive' : 'active'
+                }),
+            });
+
+            if (response.ok) {
+                toast.success(`Car ${history.carStatus === 'active' ? 'deactivated' : 'activated'} successfully!`);
+                fetchMaintenanceHistory();
+            } else {
+                throw new Error('Failed to change car status');
+            }
+        } catch (error) {
+            console.error('Status change error:', error);
+            toast.error('Error changing car status');
+        }
+    };
+
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('pt-BR');
@@ -188,7 +213,28 @@ const MaintenanceHistoryList: React.FC = () => {
 
     return (
         <div className="container mt-4">
-            <h2 className="mb-4">Maintenance History</h2>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2>Maintenance History</h2>
+                <div className="d-flex gap-2 align-items-center">
+                    <div className="d-flex align-items-center">
+                        <label className="me-2" htmlFor="statusFilter">Vehicle Status:</label>
+                        <select
+                            id="statusFilter"
+                            className="form-select form-select-sm"
+                            value={statusFilter}
+                            onChange={(e) => {
+                                setStatusFilter(e.target.value as 'all' | 'active' | 'inactive');
+                                setCurrentPage(1);
+                            }}
+                            style={{ width: 'auto' }}
+                        >
+                            <option value="all">All</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             <div className="d-flex gap-2 mb-4">
                 {!showForm && !editingHistory && (
@@ -282,12 +328,13 @@ const MaintenanceHistoryList: React.FC = () => {
                                     <th onClick={() => handleSort('maintenance_date')}>Date</th>
                                     <th onClick={() => handleSort('maintenance_kilometers')}>Mileage</th>
                                     <th onClick={() => handleSort('recurrency')}>Recurrence</th>
+                                    <th>Car Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {maintenanceHistory.map((history) => (
-                                    <tr key={history.id}>
+                                    <tr key={history.id} className={history.carStatus === 'inactive' ? 'table-secondary' : ''}>
                                         <td>{history.id}</td>
                                         <td>{history.make} {history.model} - {history.license_plate}</td>
                                         <td>{history.maintenance_type_name}</td>
@@ -295,21 +342,34 @@ const MaintenanceHistoryList: React.FC = () => {
                                         <td>{formatNumber(history.maintenance_kilometers)} km</td>
                                         <td>{history.recurrency} km</td>
                                         <td>
-                                            <button
-                                                className="btn btn-sm btn-outline-primary me-2"
-                                                onClick={() => setEditingHistory(history)}
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                className="btn btn-sm btn-outline-danger"
-                                                onClick={() => {
-                                                    setDeletingHistory(history);
-                                                    setDeleteModalOpen(true);
-                                                }}
-                                            >
-                                                Delete
-                                            </button>
+                                            <span className={`badge ${history.carStatus === 'active' ? 'bg-success' : 'bg-secondary'}`}>
+                                                {history.carStatus === 'active' ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="btn-group">
+                                                <button
+                                                    className="btn btn-sm btn-outline-primary"
+                                                    onClick={() => setEditingHistory(history)}
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-warning"
+                                                    onClick={() => handleStatusChange(history)}
+                                                >
+                                                    {history.carStatus === 'active' ? 'Deactivate' : 'Activate'}
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-outline-danger"
+                                                    onClick={() => {
+                                                        setDeletingHistory(history);
+                                                        setDeleteModalOpen(true);
+                                                    }}
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

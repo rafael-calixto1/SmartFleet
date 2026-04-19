@@ -21,6 +21,7 @@ const OilChangeHistoryList = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deletingOilChange, setDeletingOilChange] = useState<OilChangeHistoryModel | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('active');
 
   const fetchOilChangeHistory = async () => {
     const baseUrl: string = `${process.env.REACT_APP_BACKEND_URL}/oil-changes`;
@@ -28,7 +29,7 @@ const OilChangeHistoryList = () => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `${baseUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}`
+        `${baseUrl}?page=${currentPage}&limit=${limit}&sortField=${sortField}&sortOrder=${sortOrder}&status=${statusFilter}`
       );
 
       if (!response.ok) {
@@ -48,7 +49,8 @@ const OilChangeHistoryList = () => {
         observation: item.observation,
         make: item.make,
         model: item.model,
-        license_plate: item.license_plate
+        license_plate: item.license_plate,
+        carStatus: item.car_status
       }));
 
       setOilChangeHistory(loadedOilChangeHistory);
@@ -66,7 +68,7 @@ const OilChangeHistoryList = () => {
 
   useEffect(() => {
     fetchOilChangeHistory();
-  }, [currentPage, limit, sortField, sortOrder]);
+  }, [currentPage, limit, sortField, sortOrder, statusFilter]);
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -131,6 +133,30 @@ const OilChangeHistoryList = () => {
     }
   };
 
+  const handleStatusChange = async (oilChange: OilChangeHistoryModel) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/cars/${oilChange.carId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: oilChange.carStatus === 'active' ? 'inactive' : 'active'
+        }),
+      });
+
+      if (response.ok) {
+        toast.success(`Car ${oilChange.carStatus === 'active' ? 'deactivated' : 'activated'} successfully!`);
+        fetchOilChangeHistory();
+      } else {
+        throw new Error('Failed to change car status');
+      }
+    } catch (error) {
+      console.error('Status change error:', error);
+      toast.error('Error changing car status');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="container mt-4">
@@ -155,20 +181,40 @@ const OilChangeHistoryList = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">Oil Change History</h2>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2>Oil Change History</h2>
+        <div className="d-flex gap-2 align-items-center">
+          <div className="d-flex align-items-center">
+            <label className="me-2" htmlFor="statusFilter">Vehicle Status:</label>
+            <select
+              id="statusFilter"
+              className="form-select form-select-sm"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value as 'all' | 'active' | 'inactive');
+                setCurrentPage(1);
+              }}
+              style={{ width: 'auto' }}
+            >
+              <option value="all">All</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+          {!isModalOpen && (
+            <button 
+              className="btn btn-primary" 
+              onClick={() => {
+                setEditingOilChange(null);
+                setIsModalOpen(true);
+              }}
+            >
+              Add New Oil Change
+            </button>
+          )}
+        </div>
+      </div>
       
-      {!isModalOpen && (
-        <button 
-          className="btn btn-primary mb-4" 
-          onClick={() => {
-            setEditingOilChange(null);
-            setIsModalOpen(true);
-          }}
-        >
-          Add New Oil Change
-        </button>
-      )}
-
       {isModalOpen && (
         <div className="card mb-4">
           <div className="card-header d-flex justify-content-between align-items-center">
@@ -226,12 +272,13 @@ const OilChangeHistoryList = () => {
                   <th onClick={() => handleSort('oil_change_kilometers')}>Mileage</th>
                   <th onClick={() => handleSort('liters_quantity')}>Liters</th>
                   <th onClick={() => handleSort('total_cost')}>Total Cost</th>
+                  <th>Car Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {oilChangeHistory.map((history) => (
-                  <tr key={history.id}>
+                  <tr key={history.id} className={history.carStatus === 'inactive' ? 'table-secondary' : ''}>
                     <td>{history.id}</td>
                     <td>{history.make} {history.model} - {history.license_plate}</td>
                     <td>{format(new Date(history.oilChangeDate), 'MM/dd/yyyy HH:mm')}</td>
@@ -239,18 +286,31 @@ const OilChangeHistoryList = () => {
                     <td>{history.liters_quantity}</td>
                     <td>U$ {(Number(history.total_cost) || 0).toFixed(2)}</td>
                     <td>
-                      <button
-                        className="btn btn-sm btn-outline-primary me-2"
-                        onClick={() => handleEdit(history)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => handleDeleteClick(history)}
-                      >
-                        Delete
-                      </button>
+                      <span className={`badge ${history.carStatus === 'active' ? 'bg-success' : 'bg-secondary'}`}>
+                        {history.carStatus === 'active' ? 'Active' : 'Inactive'}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="btn-group">
+                        <button
+                          className="btn btn-sm btn-outline-primary"
+                          onClick={() => handleEdit(history)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-warning"
+                          onClick={() => handleStatusChange(history)}
+                        >
+                          {history.carStatus === 'active' ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => handleDeleteClick(history)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

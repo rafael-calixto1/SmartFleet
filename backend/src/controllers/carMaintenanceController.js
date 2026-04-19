@@ -40,6 +40,7 @@ exports.getAllCarMaintenanceEntries = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
+    const status = req.query.status || 'active'; // Default to 'active'
     const sortField = req.query.sortField || 'id';
     const sortOrder = req.query.sortOrder === 'desc' ? 'DESC' : 'ASC';
 
@@ -56,8 +57,26 @@ exports.getAllCarMaintenanceEntries = async (req, res) => {
       return res.status(400).json({ error: 'Invalid sort field' });
     }
 
+    // Build the WHERE clause based on status
+    let statusCondition = '';
+    let statusParams = [];
+
+    if (status === 'active') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['active'];
+    } else if (status === 'inactive') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['inactive'];
+    }
+
     // First, get the total count
-    const [countResult] = await db.execute('SELECT COUNT(*) AS total FROM car_maintenance_history');
+    const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM car_maintenance_history cmh
+      LEFT JOIN cars c ON cmh.car_id = c.id
+      ${statusCondition}
+    `;
+    const [countResult] = await db.execute(countQuery, statusParams);
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
@@ -77,15 +96,17 @@ exports.getAllCarMaintenanceEntries = async (req, res) => {
         c.make,
         c.model,
         c.license_plate,
+        c.status as car_status,
         mt.name as maintenance_type
       FROM car_maintenance_history cmh
       LEFT JOIN cars c ON cmh.car_id = c.id
       LEFT JOIN maintenance_types mt ON cmh.maintenance_type_id = mt.id
+      ${statusCondition}
       ORDER BY ${orderByClause}, cmh.id ASC
       LIMIT ${limit} OFFSET ${offset}
     `;
 
-    const [result] = await db.execute(query);
+    const [result] = await db.execute(query, statusParams);
 
     res.status(200).json({
       carMaintenanceHistory: result,

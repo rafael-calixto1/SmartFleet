@@ -12,6 +12,7 @@ export interface MaintenanceHistoryModel {
     make?: string;
     model?: string;
     license_plate?: string;
+    carStatus?: 'active' | 'inactive';
 }
 
 export const emptyMaintenanceHistory: MaintenanceHistoryModel = {

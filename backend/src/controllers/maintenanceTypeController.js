@@ -7,6 +7,7 @@ exports.getAllMaintenanceTypes = async (req, res) => {
         let limit = parseInt(req.query.limit) || 10;
         const sortField = req.query.sortField || 'id';
         const sortOrder = req.query.sortOrder || 'asc';
+        const status = req.query.status || 'active'; // Default to 'active'
 
         // Validate limit to only allow specific values
         const validLimits = [10, 20, 50, 100];
@@ -17,19 +18,33 @@ exports.getAllMaintenanceTypes = async (req, res) => {
         const offset = (page - 1) * limit;
 
         // Validate sortField to prevent SQL injection
-        const allowedSortFields = ['id', 'name', 'recurrency', 'recurrency_date'];
+        const allowedSortFields = ['id', 'name', 'recurrency', 'recurrency_date', 'status'];
         if (!allowedSortFields.includes(sortField)) {
             return res.status(400).json({ message: 'Invalid sort field' });
         }
 
+        // Build the WHERE clause based on status
+        let statusCondition = '';
+        let statusParams = [];
+
+        if (status === 'active') {
+            statusCondition = ' WHERE status = ?';
+            statusParams = ['active'];
+        } else if (status === 'inactive') {
+            statusCondition = ' WHERE status = ?';
+            statusParams = ['inactive'];
+        }
+
         // Get total count
-        const [countResult] = await db.execute('SELECT COUNT(*) as total FROM maintenance_types');
+        const countQuery = `SELECT COUNT(*) as total FROM maintenance_types${statusCondition}`;
+        const [countResult] = await db.execute(countQuery, statusParams);
         const totalItems = countResult[0].total;
         const totalPages = Math.ceil(totalItems / limit);
 
         // Get paginated and sorted results
         const [types] = await db.execute(
-            `SELECT * FROM maintenance_types ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`
+            `SELECT * FROM maintenance_types ${statusCondition} ORDER BY ${sortField} ${sortOrder} LIMIT ${limit} OFFSET ${offset}`,
+            statusParams
         );
 
         res.json({
@@ -42,6 +57,34 @@ exports.getAllMaintenanceTypes = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+// ... (other methods unchanged)
+
+// Update a maintenance type status
+exports.updateMaintenanceTypeStatus = async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!status || !['active', 'inactive'].includes(status)) {
+        return res.status(400).json({ error: 'Invalid status. Must be either "active" or "inactive".' });
+    }
+
+    try {
+        const [result] = await db.execute(
+            'UPDATE maintenance_types SET status = ? WHERE id = ?',
+            [status, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Maintenance type not found' });
+        }
+
+        res.json({ message: 'Maintenance type status updated successfully' });
+    } catch (err) {
+        console.error('Error updating maintenance type status:', err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 

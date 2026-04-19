@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS cars (
     next_oil_change INT DEFAULT NULL,
     is_next_oil_change_bigger BOOLEAN NOT NULL DEFAULT false,
     driver_id INT,
-    license_plate VARCHAR(15) NOT NULL,  
+    license_plate VARCHAR(15) NOT NULL,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     FOREIGN KEY (driver_id) REFERENCES drivers(id)
 );
 
@@ -49,7 +50,8 @@ CREATE TABLE IF NOT EXISTS maintenance_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     recurrency INT NOT NULL,
-    recurrency_date INT NOT NULL DEFAULT 0
+    recurrency_date INT NOT NULL DEFAULT 0,
+    status ENUM('active', 'inactive') DEFAULT 'active'
 );
 
 

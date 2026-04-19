@@ -79,6 +79,7 @@ exports.getOilChangeHistory = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 50;
+    const status = req.query.status || 'active'; // Default to 'active'
     const sortField = req.query.sortField || 'oil_change_date';
     const sortOrder = req.query.sortOrder === 'desc' ? 'desc' : 'asc';
 
@@ -97,18 +98,38 @@ exports.getOilChangeHistory = async (req, res) => {
 
     const offset = (page - 1) * limit;
 
-    const [countResult] = await db.execute('SELECT COUNT(*) AS total FROM oil_change_history');
+    // Build the WHERE clause based on status
+    let statusCondition = '';
+    let statusParams = [];
+
+    if (status === 'active') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['active'];
+    } else if (status === 'inactive') {
+      statusCondition = ' WHERE c.status = ?';
+      statusParams = ['inactive'];
+    }
+
+    const countQuery = `
+      SELECT COUNT(*) AS total 
+      FROM oil_change_history och
+      LEFT JOIN cars c ON och.car_id = c.id
+      ${statusCondition}
+    `;
+    const [countResult] = await db.execute(countQuery, statusParams);
     const total = countResult[0].total;
     const totalPages = Math.ceil(total / limit);
 
     // Get oil change history with car information
-    const [result] = await db.execute(
-      `SELECT och.*, c.make, c.model, c.license_plate 
-       FROM oil_change_history och
-       LEFT JOIN cars c ON och.car_id = c.id
-       ORDER BY och.${sortField} ${sortOrder} 
-       LIMIT ${limit} OFFSET ${offset}`
-    );
+    const query = `
+      SELECT och.*, c.make, c.model, c.license_plate, c.status as car_status
+      FROM oil_change_history och
+      LEFT JOIN cars c ON och.car_id = c.id
+      ${statusCondition}
+      ORDER BY och.${sortField} ${sortOrder} 
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    const [result] = await db.execute(query, statusParams);
 
     res.status(200).json({
       oilChangeHistory: result,
